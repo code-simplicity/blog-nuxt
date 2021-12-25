@@ -1,7 +1,7 @@
 import http from './http';
 
 // const baseUrl = 'http://172.30.50.4:8081';
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://localhost:8081';
 
 export const success_code = 20000;
 
@@ -49,7 +49,7 @@ export const getLabels = (count) => {
   return http.requestGet('/portal/article/label/' + count);
 };
 
-export const getArticles = (categoryId,page,size) => {
+export const getArticles = (categoryId, page, size) => {
   if (categoryId !== '') {
     return http.requestGet('/portal/article/list/' + categoryId + '/' + page + '/' + size);
   }
@@ -75,17 +75,17 @@ export const getLinkList = () => {
 };
 
 export const getSearchContent = (categoryId, keyword,
-                                 page,
-                                 size,
-                                 sort) => {
+  page,
+  size,
+  sort) => {
   // console.log(categoryId);
   // console.log(keyword);
   // console.log(page);
   // console.log(sort);
-  return http.requestGet(baseUrl + "/portal/search?keyword=" + encodeURIComponent(keyword)
-    + "&page=" + page + "&size="
-    + size + "&categoryId=" + categoryId
-    + "&sort=" + sort);
+  return http.requestGet(baseUrl + "/portal/search?keyword=" + encodeURIComponent(keyword) +
+    "&page=" + page + "&size=" +
+    size + "&categoryId=" + categoryId +
+    "&sort=" + sort);
 };
 
 export const getLoginQrCode = () => {
@@ -117,22 +117,22 @@ export const updateUserInfo = (sobUser, userId) => {
 };
 
 export const sendEmailCode = (captchaCode, email, type) => {
-  return http.requestGet('/user/verify_code?captchaCode=' + captchaCode
-    + '&email=' + email
-    + '&type=' + type);
+  return http.requestGet('/user/verify_code?captchaCode=' + captchaCode +
+    '&email=' + email +
+    '&type=' + type);
 };
 
 export const registerUser = (captcha_code, email_code, sobUser) => {
-  return http.requestPost('/user/join_in/?captcha_code=' + captcha_code
-    + '&email_code=' + email_code, sobUser);
+  return http.requestPost('/user/join_in/?captcha_code=' + captcha_code +
+    '&email_code=' + email_code, sobUser);
 };
 
 export const checkVerifyCode = (captchaCode, email, emailCode) => {
-  return http.requestGet('/user/check_email_code?captchaCode=' + captchaCode
-    + '&email=' +
-    email
-    + '&emailCode='
-    + emailCode);
+  return http.requestGet('/user/check_email_code?captchaCode=' + captchaCode +
+    '&email=' +
+    email +
+    '&emailCode=' +
+    emailCode);
 };
 
 export const updatePassword = (verifyCode, sobUser) => {
@@ -213,11 +213,11 @@ export const postNewComment = (newComment) => {
 
 
 export const postMessage = (message) => {
-  return http.requestPost("/portal/message",message)
+  return http.requestPost("/portal/message", message)
 };
 
 export const postMessageReply = (messageReply) => {
-  return http.requestPost("/portal/messageReply",messageReply)
+  return http.requestPost("/portal/messageReply", messageReply)
 };
 
 //获取留言内容
@@ -247,5 +247,3 @@ export const getMessageReplyList = (page, size) => {
     return http.requestGet(baseUrl + '/portal/messageReply/list/' + page + '/' + size)
   }
 }
-
-
