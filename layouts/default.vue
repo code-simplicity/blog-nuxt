@@ -1,6 +1,6 @@
 <template>
-  <div id="blog-box">
-    <div id="blog-header" class="blog-header clear-fix default-border-radius">
+<div id="blog-style">
+  <div id="blog-header" class="blog-header clear-fix">
       <div class="logo-box float-left">
         <div class="logo">
           <a href="/">
@@ -52,7 +52,7 @@
           </el-dropdown>
         </div>
       </div>
-      <div class="navigation-box float-right">
+      <div class="navigation-box float-left">
         <NuxtLink to="/">
           <span
             :class="
@@ -97,8 +97,20 @@
             ><i class="sob_blog soblink"></i> 友链</span
           >
         </NuxtLink>
+        <span
+          :class="
+            $store.state.currentActivityTab === 'shop'
+              ? 'header-title-activity'
+              : ''
+          "
+          <a href="https://shop.romance-to-death.top/" target="_blank"> 
+          <i class="el-icon-shopping-cart-full"></i> 商城
+          </a>
+            
+        </span>
       </div>
     </div>
+  <div id="blog-box">
     <Nuxt />
     <div class="blog-footer">
       <div class="copy-right-box">
@@ -146,92 +158,108 @@
       <img src="/rocket_top.png" />
     </div>
   </div>
+</div>
+  
 </template>
 <script>
-import * as api from '../api/api';
+import * as api from "../api/api";
 export default {
   data() {
     return {
-      timer: '',
-      formatDateTime: '',
-      redirectPath: '',
+      timer: "",
+      formatDateTime: "",
+      redirectPath: "",
       userInfo: null,
-      operationTime: ''
-    }
+      operationTime: ""
+    };
   },
   methods: {
-
     getDuringTime() {
       //建站日期
       let createTime = new Date("02/20/2021");
       //当前时间
       let startYear = createTime.getFullYear(); //开始年份
-      let startMonth = createTime.getMonth() + 1;//开始月份
-      let startDay = createTime.getDate();     //开始日期
+      let startMonth = createTime.getMonth() + 1; //开始月份
+      let startDay = createTime.getDate(); //开始日期
       let startMiao = createTime.getTime();
       let currentTime = new Date();
       let endYear = currentTime.getFullYear(); //结束年份
-      let endMonth = currentTime.getMonth() + 1;//结束月份
-      let endDay = currentTime.getDate();     //结束日期
+      let endMonth = currentTime.getMonth() + 1; //结束月份
+      let endDay = currentTime.getDate(); //结束日期
       let endMiao = currentTime.getTime();
       let years = 0;
-      let months = endMonth - startMonth + (endYear - startYear) * 12;//总月
+      let months = endMonth - startMonth + (endYear - startYear) * 12; //总月
       if (endDay < startDay) {
-        months--;//如果结束日期<输入日期，月数要-1
+        months--; //如果结束日期<输入日期，月数要-1
       }
-      years = Math.floor(months / 12);//取整计算年数
+      years = Math.floor(months / 12); //取整计算年数
       //console.log(years+"年份")
-      months = months % 12;//取余计算月数
+      months = months % 12; //取余计算月数
       //console.log(months+"月份")
-      let days = Math.floor(((endMiao - createTime.getTime()) / 24 / 60 / 60 / 1000) % 30);//计算天数
+      let days = Math.floor(
+        ((endMiao - createTime.getTime()) / 24 / 60 / 60 / 1000) % 30
+      ); //计算天数
       let chaTime = endMiao - startMiao;
       //计算出小时数
-      let yu = chaTime % (24 * 3600 * 1000);//86400000
-      let hour = Math.floor(yu / (3600 * 1000));//3600000
+      let yu = chaTime % (24 * 3600 * 1000); //86400000
+      let hour = Math.floor(yu / (3600 * 1000)); //3600000
       //计算相差分钟数
       let yuH = chaTime % (3600 * 1000);
-      let min = Math.floor(yuH / (60 * 1000));//60000
+      let min = Math.floor(yuH / (60 * 1000)); //60000
       //计算相差秒数
       let yuM = chaTime % (60 * 1000);
-      let sec = Math.floor(yuM / 1000);//1000
-      let chastr = '本网站运行时长： ' + years + '年' + months + '个月' + days + '天 ' + hour + '个小时' + min + '分' + sec + '秒';
+      let sec = Math.floor(yuM / 1000); //1000
+      let chastr =
+        "本网站运行时长： " +
+        years +
+        "年" +
+        months +
+        "个月" +
+        days +
+        "天 " +
+        hour +
+        "个小时" +
+        min +
+        "分" +
+        sec +
+        "秒";
       return chastr;
     },
 
     toTop() {
       document.documentElement.scrollTo({
         top: 0,
-        behavior: 'smooth'
-      })
+        behavior: "smooth"
+      });
     },
     onWindowScroll() {
       let offTop = document.documentElement.scrollTop;
-      let toTopBox = document.getElementById('g-to-top');
+      let toTopBox = document.getElementById("g-to-top");
       if (offTop > 500) {
-        toTopBox.style.display = 'block';
+        toTopBox.style.display = "block";
       } else {
-        toTopBox.style.display = 'none';
+        toTopBox.style.display = "none";
       }
     },
     handlerCommand(command) {
-      if (command === 'logout') {
+      if (command === "logout") {
         api.doLogout().then(result => {
           if (result.code === api.success_code) {
             //跳转到登录页面
-            location.href = "/login"
+            location.href = "/login";
           }
         });
-      } else if (command === 'adminCenter') {
-        location.href = 'http://mp.romance-to-death.top/#/index'
+      } else if (command === "adminCenter") {
+        location.href = "http://mp.romance-to-death.top/#/index";
         // location.href = 'https://mp.romance-to-death.top/#/index'
-      } else if (command === 'userInfo') {
+      } else if (command === "userInfo") {
         location.href = "/userInfo/" + this.userInfo.id;
       }
     },
     checkToken() {
       api.checkToken().then(result => {
-        let loginTips = document.getElementById('login-tips-text-box');
-        let userInfoBox = document.getElementById('user-info-box');
+        let loginTips = document.getElementById("login-tips-text-box");
+        let userInfoBox = document.getElementById("user-info-box");
         if (result.code === api.success_code) {
           //获取成功
           this.userInfo = result.data;
@@ -241,22 +269,22 @@ export default {
           // console.log(userInfoBox);
           if (userInfoBox) {
             // console.log('show user info box....');
-            userInfoBox.style.display = 'block';
+            userInfoBox.style.display = "block";
           }
         } else {
           if (loginTips) {
             //控制顶部登录提示的显示
-            loginTips.style.display = 'block';
+            loginTips.style.display = "block";
           }
         }
-      })
+      });
     }
   },
 
   // 注意在vue实例销毁前，清除我们的定时器
   destroyed() {
     if (this.timer) {
-      clearInterval(this.timer)
+      clearInterval(this.timer);
     }
   },
   beforeDestroy() {
@@ -269,24 +297,25 @@ export default {
     // this.$store.commit("setCurrentActivityTab", "about");
     // console.log(this.$store.state.currentActivityTab);
     //console.log(this.$route.path);
-    if (this.redirectPath !== '?redirect=' + location.href &&
-      this.$route.path !== '/'
-      && this.$route.path !== '/login'
-      && this.$route.path !== '/register'
-      && this.$route.path !== '/forget'
+    if (
+      this.redirectPath !== "?redirect=" + location.href &&
+      this.$route.path !== "/" &&
+      this.$route.path !== "/login" &&
+      this.$route.path !== "/register" &&
+      this.$route.path !== "/forget"
     ) {
       //排除一些特殊的，比如说登录
       //比如说首页
-      this.redirectPath = '?redirect=' + location.href;
+      this.redirectPath = "?redirect=" + location.href;
     }
     this.checkToken();
     this.getDuringTime();
-    let _this = this
+    let _this = this;
     this.timer = setInterval(function () {
-      _this.operationTime = _this.getDuringTime()
-    }, 1000)
+      _this.operationTime = _this.getDuringTime();
+    }, 1000);
   }
-}
+};
 </script>
 
 <style>
@@ -343,7 +372,7 @@ export default {
 }
 
 .header-title-activity {
-  color: #c5505a !important;
+  color: #000000 !important;
 }
 
 .header-user-username span {
@@ -374,33 +403,44 @@ export default {
 }
 
 h1 {
-  color: #85a4f1;
+  color: #424344;
   font-size: 24px;
   font-weight: 600;
 }
 
 .default-border-radius {
-  border-radius: 8px;
+  border-radius: 4px;
 }
 .navigation-box span:hover,
 .login-tips-text-box span:hover {
-  color: #747780;
+  color: #ff8873;
+}
+.navigation-box a:hover,
+.login-tips-text-box span:hover {
+  color: #ff8873;
 }
 .navigation-box span {
-  color: #85a4f1;
+  color: #003cff;
+  margin-right: 16px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.navigation-box a {
+  color: #003cff;
   margin-right: 40px;
   font-size: 18px;
   cursor: pointer;
 }
 
 .navigation-box i {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .navigation-box {
   position: absolute;
-  right: 210px;
+  left: 400px;
 }
 
 .login-tips-text-box a:hover {
@@ -420,9 +460,10 @@ h1 {
 
 .logo-box h1 {
   font-family: 华文行楷;
-  color: #4b4b4b;
+  color: #000000;
   font-size: 26px;
   font-weight: 600;
+  margin-left: 20px;
 }
 
 .logo-box .logo {
@@ -471,16 +512,19 @@ body {
 }
 
 .blog-header {
-  position: relative;
+  position: fixed;
   line-height: 30px;
-  margin-top: 20px;
   background: #ffffff;
-  padding: 10px;
+  padding: 10px 0;
+  width: 100%;
+  top: 0;
+  z-index: 99;
 }
 
 #blog-box {
   width: 1140px;
   margin: 0 auto;
+  margin-top: 60px;
 }
 
 .float-left {
@@ -494,5 +538,25 @@ body {
 .clear-fix {
   overflow: hidden;
   zoom: 1;
+}
+
+#blog-style {
+  width: 100%;
+}
+
+/* —滚动条默认显示样式– */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #fff;
 }
 </style>

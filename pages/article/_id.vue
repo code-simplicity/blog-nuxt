@@ -1,26 +1,36 @@
 <template>
   <div class="article-box" id="article-box">
-    <div class="content-box clear-fix default-border-radius">
-      <div class="article-left-part default-border-radius float-left">
-        <div class="article-content-box default-border-radius">
+    <div class="content-box clear-fix">
+      <div class="article-left-part float-left">
+        <div class="article-content-box">
           <div class="article-detail-title">
             <h1 v-text="articleRes.title"></h1>
           </div>
           <div style="background: #f7f7fc;margin-top: 20px;border-radius: 8px;">
             <div class="article-info">
-              <img :src="articleRes.sobUser.avatar" size="small">
+              <img :src="articleRes.sobUser.avatar" size="small" />
               <span class="user-name">
-            {{articleRes.sobUser.userName}}
-            </span>
+                {{ articleRes.sobUser.userName }}
+              </span>
               <span class="el-icon-date"> 发表于</span>
               <span>
-              {{articleRes.createTime | formatDate("yyyy-MM-dd hh:mm")}}
-            </span>
-              <span class="el-icon-view"> {{articleRes.viewCount}}</span>
+                {{ articleRes.createTime | formatDate("yyyy-MM-dd hh:mm") }}
+              </span>
+              <span class="el-icon-view"> {{ articleRes.viewCount }}</span>
             </div>
             <div class="article-labels">
-              <el-tag type="info" size="mini" v-for="(item,index) in articleRes.labels" :key="index">
-                <a :href="'/search?keyword='+item" target="_blank" style="color: #50a7fc">{{ item }}</a>
+              <el-tag
+                type="info"
+                size="mini"
+                v-for="(item, index) in articleRes.labels"
+                :key="index"
+              >
+                <a
+                  :href="'/search?keyword=' + item"
+                  target="_blank"
+                  style="color: #50a7fc"
+                  >{{ item }}</a
+                >
               </el-tag>
             </div>
           </div>
@@ -33,16 +43,21 @@
               </div>
             </div>
           </div>
-          <div class="catalog-box" id="article-content-category-box" v-show="!isArticleProcessing">
-
-          </div>
-          <div id="article-content" class="article-content" v-html="articleRes.content" v-show="!isArticleProcessing">
-
-          </div>
+          <div
+            class="catalog-box"
+            id="article-content-category-box"
+            v-show="!isArticleProcessing"
+          ></div>
+          <div
+            id="article-content"
+            class="article-content"
+            v-html="articleRes.content"
+            v-show="!isArticleProcessing"
+          ></div>
         </div>
 
-        <div class="article-comment-box default-border-radius">
-          <div class="article-comment-input default-border-radius">
+        <div class="article-comment-box">
+          <div class="article-comment-input">
             <div class="comment-input-header">
               评论
             </div>
@@ -50,7 +65,8 @@
               <el-input
                 @focus="checkLogin"
                 placeholder="*请输入昵称"
-                v-model="comment.userName"></el-input>
+                v-model="comment.userName"
+              ></el-input>
             </div>
             <div class="comment-input-box">
               <el-input
@@ -60,44 +76,74 @@
                 placeholder="请文明评论"
                 v-model="comment.content"
                 maxlength="256"
-                show-word-limit>
+                show-word-limit
+              >
               </el-input>
             </div>
             <div class="comment-submit-btn">
-              <el-button type="primary" size="medium" @click="doComment">评论</el-button>
+              <el-button type="primary" size="medium" @click="doComment"
+                >评论</el-button
+              >
             </div>
           </div>
-          <div class="article-comment-list default-border-radius" id="article-comment-list">
+          <div class="article-comment-list" id="article-comment-list">
             <div class="comment-list-header">
               文章评论
             </div>
-            <div class="comment-item-list" v-for="(item,index) in commentList" :key="index">
+            <div
+              class="comment-item-list"
+              v-for="(item, index) in commentList"
+              :key="index"
+            >
               <div class="article-comment-item">
                 <div class="article-comment-user-info">
-                  <a :href="'/userInfo/'+item.id" target="_blank">
-                    <img :src="item.userAvatar">
-                    <span class="user-name">{{item.userName}}</span>
+                  <a :href="'/userInfo/' + item.id" target="_blank">
+                    <img :src="item.userAvatar" />
+                    <span class="user-name">{{ item.userName }}</span>
                   </a>
-                  <el-tag size="mini" type="danger" v-if="item.state==='3'">置顶</el-tag>
-                  <el-tag  size="small" v-if="item.roles === 'role_admin'">小站主人
+                  <el-tag size="mini" type="danger" v-if="item.state === '3'"
+                    >置顶</el-tag
+                  >
+                  <el-tag size="small" v-if="item.roles === 'role_admin'"
+                    >小站主人
                   </el-tag>
-                  <el-tag type="success" size="small" v-if="item.roles === 'role_normal'">小站成员
+                  <el-tag
+                    type="success"
+                    size="small"
+                    v-if="item.roles === 'role_normal'"
+                    >小站成员
                   </el-tag>
-                  <el-tag type="info" size="small" v-if="item.roles === 'role_tourist'">游客
+                  <el-tag
+                    type="info"
+                    size="small"
+                    v-if="item.roles === 'role_tourist'"
+                    >游客
                   </el-tag>
-                  <span class="el-icon-date">{{ item.createTime | formatDate("yyyy-MM-dd hh:mm") }}</span>
+                  <span class="el-icon-date">{{
+                    item.createTime | formatDate("yyyy-MM-dd hh:mm")
+                  }}</span>
                 </div>
                 <div class="article-comment-content">
-                  {{item.content}}
-                    <i><span class="el-icon-chat-dot-round" @click="onReplyClick(index,item.userName)"></span></i>
+                  {{ item.content }}
+                  <i
+                    ><span
+                      class="el-icon-chat-dot-round"
+                      @click="onReplyClick(index, item.userName)"
+                    ></span
+                  ></i>
                 </div>
 
-                <div class="article-sub-comment-box clear-fix" style="display: none;" :id="'sub_input_'+index">
+                <div
+                  class="article-sub-comment-box clear-fix"
+                  style="display: none;"
+                  :id="'sub_input_' + index"
+                >
                   <div class="sub-comment-input float-left">
                     <div class="comment-input-box">
                       <el-input
                         placeholder="*请输入昵称"
-                        v-model="subComment.userName"></el-input>
+                        v-model="subComment.userName"
+                      ></el-input>
                     </div>
                     <div class="comment-input-box">
                       <el-input
@@ -107,44 +153,74 @@
                         :placeholder="subCommentPlaceholder"
                         v-model="subComment.content"
                         maxlength="256"
-                        show-word-limit>
+                        show-word-limit
+                      >
                       </el-input>
                     </div>
                     <div class="sub-comment-btn float-right">
-                      <el-button type="primary" @click="doCommitNewCommentReply(item.id,item.userName)">
-                        提交回复</el-button>
+                      <el-button
+                        type="primary"
+                        @click="doCommitNewCommentReply(item.id, item.userName)"
+                      >
+                        提交回复</el-button
+                      >
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="new-comment-child-box" v-for="(item1,index1) in newCommentReplyRes" :key="index1"
-                   v-if="item.id===item1.parentId">
+              <div
+                class="new-comment-child-box"
+                v-for="(item1, index1) in newCommentReplyRes"
+                :key="index1"
+                v-if="item.id === item1.parentId"
+              >
                 <div class="article-comment-user-info">
-                  <a :href="'/userInfo/'+item1.id" target="_blank">
-                    <img :src="item1.userAvatar">
-                    <span class="user-name">{{item1.userName}}</span>
+                  <a :href="'/userInfo/' + item1.id" target="_blank">
+                    <img :src="item1.userAvatar" />
+                    <span class="user-name">{{ item1.userName }}</span>
                   </a>
-                  <el-tag  size="small" v-if="item1.roles === 'role_admin'">小站主人
+                  <el-tag size="small" v-if="item1.roles === 'role_admin'"
+                    >小站主人
                   </el-tag>
-                  <el-tag type="success" size="small" v-if="item1.roles === 'role_normal'">小站成员
+                  <el-tag
+                    type="success"
+                    size="small"
+                    v-if="item1.roles === 'role_normal'"
+                    >小站成员
                   </el-tag>
-                  <el-tag type="info" size="small" v-if="item1.roles === 'role_tourist'">游客
+                  <el-tag
+                    type="info"
+                    size="small"
+                    v-if="item1.roles === 'role_tourist'"
+                    >游客
                   </el-tag>
                   <span style="line-height: 24px">回复</span>
-                  <span class="user-name">{{ item1.parentUserName}}</span>
-                  <span class="el-icon-date">{{ item1.createTime | formatDate("yyyy-MM-dd hh:mm") }}</span>
+                  <span class="user-name">{{ item1.parentUserName }}</span>
+                  <span class="el-icon-date">{{
+                    item1.createTime | formatDate("yyyy-MM-dd hh:mm")
+                  }}</span>
                 </div>
                 <div class="new-comment-child-content">
                   {{ item1.content }}
-                  <i><span class="el-icon-chat-dot-round" @click="replyChildNewComment(index1,item1.userName)"></span></i>
+                  <i
+                    ><span
+                      class="el-icon-chat-dot-round"
+                      @click="replyChildNewComment(index1, item1.userName)"
+                    ></span
+                  ></i>
                 </div>
-                <div class="article-sub-comment-box clear-fix" style="display: none;" :id="'sub_input_child_' + index1">
+                <div
+                  class="article-sub-comment-box clear-fix"
+                  style="display: none;"
+                  :id="'sub_input_child_' + index1"
+                >
                   <div class="sub-comment-input float-left">
                     <div class="comment-input-box">
                       <el-input
                         @focus="checkLogin"
                         placeholder="*请输入昵称"
-                        v-model="subComment.userName"></el-input>
+                        v-model="subComment.userName"
+                      ></el-input>
                     </div>
                     <div class="comment-input-box">
                       <el-input
@@ -154,54 +230,77 @@
                         :placeholder="subCommentPlaceholder"
                         v-model="subComment.content"
                         maxlength="256"
-                        show-word-limit>
+                        show-word-limit
+                      >
                       </el-input>
                     </div>
                     <div class="sub-comment-btn float-right">
-                      <el-button size="mini" type="primary" @click="doCommitNewCommentReply(item.id,item1.userName)">回复</el-button>
+                      <el-button
+                        size="mini"
+                        type="primary"
+                        @click="
+                          doCommitNewCommentReply(item.id, item1.userName)
+                        "
+                        >回复</el-button
+                      >
                     </div>
                   </div>
                 </div>
               </div>
-              <hr>
+              <hr />
             </div>
-            <div class="no-comment-content" v-if="commentList.length===0">
+            <div class="no-comment-content" v-if="commentList.length === 0">
               暂时没有评论，赶快来评论吧~
             </div>
-            <div class="loader-more-comment" v-if="!isLastPage" @click="doLoadMore">
+            <div
+              class="loader-more-comment"
+              v-if="!isLastPage"
+              @click="doLoadMore"
+            >
               加载更多评论>>
             </div>
           </div>
         </div>
-        <div class="article-recommend-box default-border-radius">
+        <div class="article-recommend-box">
           <div class="recommend-header-title">
             推荐文章
           </div>
-          <div class="recommend-item" v-for="(item,index) in recommendArticles" :key="index">
+          <div
+            class="recommend-item"
+            v-for="(item, index) in recommendArticles"
+            :key="index"
+          >
             <div class="recommend-title">
-              <a :href="'/article/'+item.id">
-                {{item.title}}
+              <a :href="'/article/' + item.id">
+                {{ item.title }}
               </a>
             </div>
             <div class="recommend-summary">
-              {{item.summary}}
+              {{ item.summary }}
             </div>
             <div class="recommend-info">
               <span class="el-icon-date">
-                {{item.createTime | formatDate("yyyy-MM-dd hh:mm")}}
+                {{ item.createTime | formatDate("yyyy-MM-dd hh:mm") }}
               </span>
               <span class="el-icon-view">
-                {{' '+item.viewCount}}
+                {{ " " + item.viewCount }}
               </span>
-              <el-tag type="info" size="mini" v-for="(tag,tagIndex) in item.labels" :key="tagIndex">
-                <a :href="'/search?keyword='+tag" target="_blank">{{tag}}</a>
+              <el-tag
+                type="info"
+                size="mini"
+                v-for="(tag, tagIndex) in item.labels"
+                :key="tagIndex"
+              >
+                <a :href="'/search?keyword=' + tag" target="_blank">{{
+                  tag
+                }}</a>
               </el-tag>
             </div>
           </div>
         </div>
       </div>
-      <div class="article-right-part default-border-radius float-left">
-        <div class="article-right-card article-detail-hot-label default-border-radius">
+      <div class="article-right-part float-left">
+        <div class="article-right-card article-detail-hot-label">
           <div class="right-card-title">
             热门标签
           </div>
@@ -209,464 +308,380 @@
             <WordCloud></WordCloud>
           </div>
         </div>
-<!--        <div class="article-right-card" id="article-right-taobao-ad">-->
-<!--          <div class="right-card-title">-->
-<!--            赞助商广告-->
-<!--          </div>-->
-<!--          <div class="right-card-content article-right-taobao-ad">-->
-<!--            <TaobaoLoop></TaobaoLoop>-->
-<!--          </div>-->
-<!--        </div>-->
-        <div class="article-right-card default-border-radius" id="article-right-subscription-box">
+        <!--        <div class="article-right-card" id="article-right-taobao-ad">-->
+        <!--          <div class="right-card-title">-->
+        <!--            赞助商广告-->
+        <!--          </div>-->
+        <!--          <div class="right-card-content article-right-taobao-ad">-->
+        <!--            <TaobaoLoop></TaobaoLoop>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <div class="article-right-card" id="article-right-subscription-box">
           <div class="right-card-title">
             公众号
           </div>
           <div class="right-card-content">
-            <img src="/gongzhonghao.png">
+            <img src="/gongzhonghao.png" />
           </div>
         </div>
-        <div class="article-right-card default-border-radius" id="catalog-box">
+        <div class="article-right-card" id="catalog-box">
           <div class="right-card-title">
             文章目录
           </div>
-          <div class="right-card-content" id="article-catalog-container">
-
-          </div>
+          <div class="right-card-content" id="article-catalog-container"></div>
         </div>
       </div>
     </div>
     <div class="article-detail-part">
-      <el-dialog
-        :visible.sync="isImageDialogShow">
-        <img :src="targetImagePath"/>
+      <el-dialog :visible.sync="isImageDialogShow">
+        <img :src="targetImagePath" />
       </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-  import hljs from 'highlight.js';
-  import 'highlight.js/styles/nnfx.css';
-  import * as api from '../../api/api'
-  import Catelog from '../../utils/headerLineHandler';
-  import {success_code} from "../../api/api";
+import hljs from "highlight.js";
+import "highlight.js/styles/github-gist.css";
+import * as api from "../../api/api";
+import Catelog from "../../utils/headerLineHandler";
+import { success_code } from "../../api/api";
 
-  // const highlightCode = () => {
-  //   const block = document.querySelectorAll('pre code')
-  //   hljs.configure({useBR: true});
-  //   block.forEach((el) => {
-  //     hljs.highlightBlock(el)
-  //   })
-  // };
+// const highlightCode = () => {
+//   const block = document.querySelectorAll('pre code')
+//   hljs.configure({useBR: true});
+//   block.forEach((el) => {
+//     hljs.highlightBlock(el)
+//   })
+// };
 
-  let lastInputBox = null;
-  export default {
-    head() {
-      return {
-        title: '本是人间红尘客-' + this.articleRes.title,
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: '本是人间红尘客-' + this.articleRes.summary
-          },
-          {
-            hid: 'keywords',
-            name: 'keywords',
-            content: this.labelsStr
-          }
-        ]
+let lastInputBox = null;
+export default {
+  head() {
+    return {
+      title: "本是人间红尘客-" + this.articleRes.title,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "本是人间红尘客-" + this.articleRes.summary
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: this.labelsStr
+        }
+      ]
+    };
+  },
+  data() {
+    return {
+      isArticleProcessing: true,
+      subComment: {
+        content: "",
+        userName: "",
+        parentId: "",
+        parentUserName: "",
+        userAvatar: "",
+        articleId: ""
+      },
+      comment: {
+        content: "",
+        articleId: "",
+        userAvatar: "",
+        roles: ""
+      },
+      isImageDialogShow: false,
+      targetImagePath: "",
+      currentPage: 1,
+      pageSize: 10,
+      subCommentPlaceholder: "请文明回复"
+    };
+  },
+
+  /*加载文章详情,需要把文章的ID传过来*/
+  async asyncData({ params }) {
+    let articleResult = await api.getArticleDetailById(params.id);
+    let recommendArticleRes = await api.getRecommendArticle(
+      articleResult.data.id,
+      10
+    );
+    //加载第一页评论数据
+    let commentRes = await api.getCommentsByArticleId(
+      articleResult.data.id,
+      1,
+      10
+    );
+    let newCommentReplyResult = await api.getNewCommentReplyList(1, 30);
+    // console.log(newCommentReplyResult.data.content);
+    let labels = "";
+    let labelsList = articleResult.data.labels;
+    labelsList.forEach((label, index) => {
+      labels += label;
+      if (index < labelsList.length - 1) {
+        // console.log(index);
+        labels += ",";
+      }
+    });
+    // console.log(labels);
+    return {
+      articleRes: articleResult.data,
+      recommendArticles: recommendArticleRes.data,
+      commentList: commentRes.data.contents,
+      isLastPage: commentRes.data.last,
+      labelsStr: labels,
+      newCommentReplyRes: newCommentReplyResult.data.content
+    };
+  },
+  methods: {
+    // updated() {
+    //   highlightCode()
+    // },
+
+    replyChildNewComment(index, userName) {
+      this.checkLogin();
+      // this.checkLogin1();
+      let subInputBox = document.getElementById("sub_input_child_" + index);
+      this.subComment.content = "";
+      this.subCommentPlaceholder = "回复@" + userName;
+      if (subInputBox) {
+        if (lastInputBox) {
+          lastInputBox.style.display = "none";
+        }
+        lastInputBox = subInputBox;
+        subInputBox.style.display = "block";
       }
     },
-    data() {
-      return {
-        isArticleProcessing: true,
-        subComment: {
-          content: "",
-          userName: "",
-          parentId: "",
-          parentUserName: "",
-          userAvatar: '',
-          articleId: ''
-        },
-        comment: {
-          content: '',
-          articleId: '',
-          userAvatar: '',
-          roles: ''
-        },
-        isImageDialogShow: false,
-        targetImagePath: '',
-        currentPage: 1,
-        pageSize: 10,
-        subCommentPlaceholder: '请文明回复'
-      };
-    },
 
-    /*加载文章详情,需要把文章的ID传过来*/
-    async asyncData({params}) {
-      let articleResult = await api.getArticleDetailById(params.id);
-      let recommendArticleRes = await api.getRecommendArticle(articleResult.data.id, 10);
-      //加载第一页评论数据
-      let commentRes = await api.getCommentsByArticleId(articleResult.data.id, 1, 10);
-      let newCommentReplyResult = await api.getNewCommentReplyList(1, 30)
-      // console.log(newCommentReplyResult.data.content);
-      let labels = '';
-      let labelsList = articleResult.data.labels;
-      labelsList.forEach((label, index) => {
-        labels += label;
-        if (index < labelsList.length - 1) {
-          // console.log(index);
-          labels += ',';
+    getNewCommentReply() {
+      api.getNewCommentReplyList(1, 30).then(result => {
+        if (result.code === success_code) {
+          this.newCommentReplyRes = result.data.content;
         }
       });
-      // console.log(labels);
-      return {
-        articleRes: articleResult.data,
-        recommendArticles: recommendArticleRes.data,
-        commentList: commentRes.data.contents,
-        isLastPage: commentRes.data.last,
-        labelsStr: labels,
-        newCommentReplyRes: newCommentReplyResult.data.content,
+    },
+
+    //二级评论
+    doCommitNewCommentReply(id, name) {
+      if (this.subComment.userName === "") {
+        this.$message.error("请填写一个昵称吧");
+        return;
+      }
+      if (this.subComment.content === "") {
+        this.$message.error("您还没有写评论啊哦o(╥﹏╥)o");
+        return;
+      }
+      this.subComment.parentId = id;
+      this.subComment.parentUserName = name;
+      this.subComment.articleId = this.articleRes.id;
+      this.loading = true;
+      api.postNewCommentReply(this.subComment).then(result => {
+        if (result.code === success_code) {
+          this.$message.success(result.message);
+          this.getArticleCommentByPage(1);
+          this.getNewCommentReply();
+          this.resetComment();
+          this.$message.success(result.message);
+        } else {
+          this.$message.error(result.message);
+        }
+      });
+      if (this.dialogVisible === true) {
+        this.dialogVisible = false;
       }
     },
-    methods: {
 
-      // updated() {
-      //   highlightCode()
-      // },
-
-      replyChildNewComment(index, userName) {
-        this.checkLogin()
-        // this.checkLogin1();
-        let subInputBox = document.getElementById('sub_input_child_' + index);
-        this.subComment.content = '';
-        this.subCommentPlaceholder = '回复@' + userName;
-        if (subInputBox) {
-          if (lastInputBox) {
-            lastInputBox.style.display = 'none';
-          }
-          lastInputBox = subInputBox;
-          subInputBox.style.display = 'block';
-        }
-      },
-
-      getNewCommentReply() {
-        api.getNewCommentReplyList(1, 30).then(result => {
-          if (result.code === success_code) {
-            this.newCommentReplyRes = result.data.content;
-          }
-        })
-      },
-
-      //二级评论
-      doCommitNewCommentReply(id, name) {
-        if (this.subComment.userName === '') {
-            this.$message.error("请填写一个昵称吧");
-            return;
-          }
-          if (this.subComment.content === '') {
-            this.$message.error('您还没有写评论啊哦o(╥﹏╥)o');
-            return;
-          }
-          this.subComment.parentId = id;
-          this.subComment.parentUserName = name;
-          this.subComment.articleId = this.articleRes.id;
-          this.loading = true;
-        api.postNewCommentReply(this.subComment).then(result => {
-          if (result.code === success_code) {
-            this.$message.success(result.message);
-            this.getArticleCommentByPage(1)
-            this.getNewCommentReply();
-            this.resetComment();
-            this.$message.success(result.message);
-          } else {
-            this.$message.error(result.message);
-          }
-        })
-        if (this.dialogVisible === true){
-          this.dialogVisible = false;
-        }
-      },
-
-      doLoadMore() {
-        this.currentPage++;
-        api.getCommentsByArticleId(this.articleRes.id, this.currentPage, this.pageSize).then(result => {
+    doLoadMore() {
+      this.currentPage++;
+      api
+        .getCommentsByArticleId(
+          this.articleRes.id,
+          this.currentPage,
+          this.pageSize
+        )
+        .then(result => {
           if (result.code === api.success_code) {
             //处理成功的结果
             this.commentList = this.commentList.concat(result.data.contents);
             //处理是否有更多
-            this.isLastPage = result.data.last
+            this.isLastPage = result.data.last;
           }
-        }).catch(error => {
+        })
+        .catch(error => {
           console.log(error);
         });
-      },
-      onReplyClick(index, userName) {
-        this.checkLogin()
-        // this.checkLogin1();
-        let subInputBox = document.getElementById('sub_input_' + index);
-        this.subComment.content = '';
-        this.subCommentPlaceholder = '回复@' + userName;
-        if (subInputBox) {
-          if (lastInputBox) {
-            lastInputBox.style.display = 'none';
-          }
-          lastInputBox = subInputBox;
-          subInputBox.style.display = 'block';
-        }
-      },
-      checkLogin() {
-        //检查是否有效
-        api.checkToken().then(result => {
-          //console.log(result)
-          if (result.code === success_code) {
-            this.comment.userName = result.data.userName;
-            this.comment.avatar = result.data.avatar;
-          } else {
-            //跳转登录界面
-            location.href = "/login?redirect=" + location.href;
-          }
-          // if (result.data.roles === 'role_admin') {
-          //   this.subComment.isAdmin = '1';
-          // } else {
-          //   this.subComment.isAdmin = '0';
-          // }
-        });
-      },
-      doComment() {
-        // //检查是否有登录,只检查token
-        let sobBlogTokenIndex = document.cookie.indexOf('sob_blog_token');
-        //console.log('sobBlogTokenIndex' + sobBlogTokenIndex);
-        if (sobBlogTokenIndex === -1) {
-          location.href = "/login?redirect=" + location.href;
-          return;
-        }
-        //检查内容
-        if (this.comment.userName === '') {
-          this.$message.error("请填写一个昵称吧");
-          return;
-        }
-        if (this.comment.content === '') {
-          this.$message.error("您没有填写评论内容呢！");
-          return;
-        }
-        //补全内容
-        this.comment.articleId = this.articleRes.id;
-        //获取父id
-
-        //提交内容
-        //console.log(this.comment);
-        api.postComment(this.comment).then(result => {
-          if (result.code === api.success_code) {
-            //刷新评论列表
-            this.getArticleCommentByPage(1);
-            this.resetComment();
-            this.$message.success(result.message);
-          } else {
-            this.$message.error(result.message);
-          }
-        })
-      },
-      resetComment() {
-        this.comment.content = '';
-        this.comment.parentUserName = '';
+    },
+    onReplyClick(index, userName) {
+      this.checkLogin();
+      // this.checkLogin1();
+      let subInputBox = document.getElementById("sub_input_" + index);
+      this.subComment.content = "";
+      this.subCommentPlaceholder = "回复@" + userName;
+      if (subInputBox) {
         if (lastInputBox) {
-          lastInputBox.style.display = 'none';
+          lastInputBox.style.display = "none";
         }
-      },
-      getArticleCommentByPage(page) {
-        api.getCommentsByArticleId(this.articleRes.id, page, this.pageSize).then(result => {
-          this.commentList = result.data.contents;
-          this.currentPage = page;
-        })
-      },
-
-      getNewComment(page) {
-        api.getNewCommentsByArticleId(this.articleRes.id,page, this.pageSize).then(result => {
-          if (result.code === success_code) {
-            this.newCommentRes = result.data.contents
-          }
-        })
-      },
-
-      onWindowScroll() {
-        let catalogBox = document.getElementById('catalog-box');
-        let weixinBox = document.getElementById('article-right-subscription-box');
-        let parentPart = document.getElementById('article-box');
-        if (catalogBox) {
-          //console.log(weixinBox.offsetHeight);
-          let bottomOfWC = weixinBox.offsetTop + weixinBox.offsetHeight;
-          let scrolledTop = document.documentElement.scrollTop;
-          let scrolledLeft = document.documentElement.scrollLeft;
-          if (scrolledTop >= bottomOfWC) {
-            // console.log('显示悬浮内容...');
-            catalogBox.style.position = 'fixed';
-            catalogBox.style.top = '20px';
-            catalogBox.style.width = '210px';
-            //显示我们的悬浮内容
-          } else {
-            catalogBox.style.position = 'fixed';
-            catalogBox.style.top = (bottomOfWC - scrolledTop + 20) + 'px';
-            // console.log('隐藏悬浮内容...')
-          }
-
-          //处理左右滑动
-          if (scrolledLeft > 0) {
-            catalogBox.style.left = parentPart.offsetLeft + parentPart.offsetWidth
-              - catalogBox.offsetWidth - scrolledLeft + 'px';
-          } else {
-            //正常状态的，左边应该它老爸的左边
-            catalogBox.style.left = parentPart.offsetLeft + parentPart.offsetWidth
-              - catalogBox.offsetWidth + 'px';
-          }
-        }
-      },
-      showImage(event) {
-        this.isImageDialogShow = true;
-        //显示dialog
-        this.targetImagePath = event.target.src;
-      },
-      handleContentImages() {
-        //遍历图片
-        let contentBox = document.getElementById('article-content');
-        let images = contentBox.querySelectorAll('img');
-        images.forEach(item => {
-          //console.log(item);
-          item.addEventListener('click', this.showImage);
-        })
+        lastInputBox = subInputBox;
+        subInputBox.style.display = "block";
       }
     },
-    mounted() {
-      new Catelog({
-        contentEl: 'article-content',
-        catalogEl: 'article-catalog-container',
-        selector: ['h1', 'h2', 'h3']
+    checkLogin() {
+      //检查是否有效
+      api.checkToken().then(result => {
+        //console.log(result)
+        if (result.code === success_code) {
+          this.comment.userName = result.data.userName;
+          this.comment.avatar = result.data.avatar;
+        } else {
+          //跳转登录界面
+          location.href = "/login?redirect=" + location.href;
+        }
+        // if (result.data.roles === 'role_admin') {
+        //   this.subComment.isAdmin = '1';
+        // } else {
+        //   this.subComment.isAdmin = '0';
+        // }
       });
-      hljs.initHighlighting();
-      // console.log(hljs)
-      this.handleContentImages();
-      //添加滚动监听
-      this.onWindowScroll();
-      window.addEventListener('scroll', this.onWindowScroll);
-      let that = this;
-      let timer = setInterval(function () {
-        that.isArticleProcessing = false;
-        clearInterval(timer)
-      }, 1000);
     },
-    beforeDestroy() {
-      window.removeEventListener('scroll', this.onWindowScroll);
+    doComment() {
+      // //检查是否有登录,只检查token
+      let sobBlogTokenIndex = document.cookie.indexOf("sob_blog_token");
+      //console.log('sobBlogTokenIndex' + sobBlogTokenIndex);
+      if (sobBlogTokenIndex === -1) {
+        location.href = "/login?redirect=" + location.href;
+        return;
+      }
+      //检查内容
+      if (this.comment.userName === "") {
+        this.$message.error("请填写一个昵称吧");
+        return;
+      }
+      if (this.comment.content === "") {
+        this.$message.error("您没有填写评论内容呢！");
+        return;
+      }
+      //补全内容
+      this.comment.articleId = this.articleRes.id;
+      //获取父id
+
+      //提交内容
+      //console.log(this.comment);
+      api.postComment(this.comment).then(result => {
+        if (result.code === api.success_code) {
+          //刷新评论列表
+          this.getArticleCommentByPage(1);
+          this.resetComment();
+          this.$message.success(result.message);
+        } else {
+          this.$message.error(result.message);
+        }
+      });
     },
-  };
+    resetComment() {
+      this.comment.content = "";
+      this.comment.parentUserName = "";
+      if (lastInputBox) {
+        lastInputBox.style.display = "none";
+      }
+    },
+    getArticleCommentByPage(page) {
+      api
+        .getCommentsByArticleId(this.articleRes.id, page, this.pageSize)
+        .then(result => {
+          this.commentList = result.data.contents;
+          this.currentPage = page;
+        });
+    },
+
+    getNewComment(page) {
+      api
+        .getNewCommentsByArticleId(this.articleRes.id, page, this.pageSize)
+        .then(result => {
+          if (result.code === success_code) {
+            this.newCommentRes = result.data.contents;
+          }
+        });
+    },
+
+    onWindowScroll() {
+      let catalogBox = document.getElementById("catalog-box");
+      let weixinBox = document.getElementById("article-right-subscription-box");
+      let parentPart = document.getElementById("article-box");
+      if (catalogBox) {
+        //console.log(weixinBox.offsetHeight);
+        let bottomOfWC = weixinBox.offsetTop + weixinBox.offsetHeight;
+        let scrolledTop = document.documentElement.scrollTop;
+        let scrolledLeft = document.documentElement.scrollLeft;
+        if (scrolledTop >= bottomOfWC) {
+          // console.log('显示悬浮内容...');
+          catalogBox.style.position = "fixed";
+          catalogBox.style.top = "60px";
+          catalogBox.style.width = "210px";
+          //显示我们的悬浮内容
+        } else {
+          catalogBox.style.position = "fixed";
+          catalogBox.style.top = bottomOfWC - scrolledTop + 12 + "px";
+          // console.log('隐藏悬浮内容...')
+        }
+
+        //处理左右滑动
+        if (scrolledLeft > 0) {
+          catalogBox.style.left =
+            parentPart.offsetLeft +
+            parentPart.offsetWidth -
+            catalogBox.offsetWidth -
+            scrolledLeft +
+            "px";
+        } else {
+          //正常状态的，左边应该它老爸的左边
+          catalogBox.style.left =
+            parentPart.offsetLeft +
+            parentPart.offsetWidth -
+            catalogBox.offsetWidth +
+            "px";
+        }
+      }
+    },
+    showImage(event) {
+      this.isImageDialogShow = true;
+      //显示dialog
+      this.targetImagePath = event.target.src;
+    },
+    handleContentImages() {
+      //遍历图片
+      let contentBox = document.getElementById("article-content");
+      let images = contentBox.querySelectorAll("img");
+      images.forEach(item => {
+        //console.log(item);
+        item.addEventListener("click", this.showImage);
+      });
+    }
+  },
+  mounted() {
+    new Catelog({
+      contentEl: "article-content",
+      catalogEl: "article-catalog-container",
+      selector: ["h1", "h2", "h3"]
+    });
+    hljs.initHighlighting();
+    // console.log(hljs)
+    this.handleContentImages();
+    //添加滚动监听
+    this.onWindowScroll();
+    window.addEventListener("scroll", this.onWindowScroll);
+    let that = this;
+    let timer = setInterval(function() {
+      that.isArticleProcessing = false;
+      clearInterval(timer);
+    }, 1000);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onWindowScroll);
+  }
+};
 </script>
 
-
 <style>
-
-.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
-  background: #fff;
-  color: #000;
-}
-
-.xml .hljs-meta {
-  font-weight: bold;
-  font-style: italic;
-  color: #ffab00;
-}
-
-.hljs-comment,
-.hljs-quote {
-  font-family: 华文行楷;
-  color: #0034ff;
-}
-
-.hljs-name,
-.hljs-keyword {
-  font-weight: bold;
-  color: #ff0000;
-}
-
-.hljs-name,
-.hljs-attr {
-  font-weight: bold;
-}
-
-.hljs-string {
-  font-weight: normal;
-}
-
-.hljs-variable,
-.hljs-template-variable {
-  color: #00c1ff;
-}
-
-.hljs-code,
-.hljs-string,
-.hljs-meta-string,
-.hljs-number,
-.hljs-regexp,
-.hljs-link {
-  color: #0d00ff;
-}
-
-.hljs-title,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-built_in,
-.hljs-builtin-name {
-  font-weight: bold;
-  color: #ff0000;
-}
-
-.hljs-section,
-.hljs-meta {
-  color: #d47201;
-}
-
-.hljs-class .hljs-title,
-.hljs-type {
-  color: #963bf8;
-}
-
-.hljs-function .hljs-title,
-.hljs-attr,
-.hljs-subst {
-  color: #ff0000;
-}
-
-.hljs-formula {
-  background-color: #dbdbdb;
-  font-style: italic;
-}
-
-.hljs-addition {
-  background-color: #00ff00;
-}
-
-.hljs-deletion {
-  background-color: #c11818;
-}
-
-.hljs-selector-id,
-.hljs-selector-class {
-  color: #ff5900;
-}
-
-.hljs-doctag,
-.hljs-strong {
-  color: #5600fc;
-  font-weight: bold;
-}
-
-.hljs-emphasis {
-  color: #ff0176;
-  font-style: italic;
-}
-
 hr {
   background-color: #d9d0d0;
   border: none;
@@ -687,12 +702,14 @@ hr {
   font-weight: 600;
 }
 
-.parent-reply-btn:hover, .child-reply-btn:hover {
-  color: #A612FF;
+.parent-reply-btn:hover,
+.child-reply-btn:hover {
+  color: #1900ff;
   cursor: pointer;
 }
 
-.parent-reply-btn, .child-reply-btn {
+.parent-reply-btn,
+.child-reply-btn {
   font-size: 16px;
   font-weight: 600;
   float: right;
@@ -703,12 +720,12 @@ hr {
   margin-left: 60px;
 }
 
-.new-comment-child-content i{
+.new-comment-child-content i {
   font-size: 18px;
   margin-right: 60px;
-  color: #2d81db;
+  color: #1900ff;
 }
-.new-comment-child-content i:hover{
+.new-comment-child-content i:hover {
   color: #f8225f;
 }
 
@@ -718,169 +735,169 @@ hr {
   border-radius: 8px;
 }
 
-.article-detail-title h1{
+.article-detail-title h1 {
   text-align: center;
 }
 
-  .article-loading-part .content-loading {
-    padding: 10px;
-    background: #f3f3f3;
-    margin-top: 5px;
-  }
+.article-loading-part .content-loading {
+  padding: 10px;
+  background: #f3f3f3;
+  margin-top: 5px;
+}
 
-  .article-loading-part .loading-title {
-    width: 200px;
-    height: 24px;
-    background-color: #eaeaea;
-  }
+.article-loading-part .loading-title {
+  width: 200px;
+  height: 24px;
+  background-color: #eaeaea;
+}
 
-  .article-loading-part .loading-content {
-    margin-left: 10px;
-    margin-top: 10px;
-    width: 600px;
-  }
+.article-loading-part .loading-content {
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 600px;
+}
 
-  .article-loading-part .loading-text {
+.article-loading-part .loading-text {
+  width: 100%;
+  height: 16px;
+  margin: 0 0 10px;
+  background-color: #eaeaea;
+  -webkit-animation: loading 1s ease-in-out infinite;
+  animation: loading 1s ease-in-out infinite;
+}
+
+.article-loading-part {
+  margin-top: 20px;
+}
+
+.article-loading-part .animation-delay {
+  -webkit-animation: loading 1s ease-in-out -0.5s infinite;
+  animation: loading 1s ease-in-out -0.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    width: 20%;
+  }
+  50% {
     width: 100%;
-    height: 16px;
-    margin: 0 0 10px;
-    background-color: #eaeaea;
-    -webkit-animation: loading 1s ease-in-out infinite;
-    animation: loading 1s ease-in-out infinite;
   }
-
-  .article-loading-part {
-    margin-top: 20px;
+  100% {
+    width: 20%;
   }
+}
 
-  .article-loading-part .animation-delay {
-    -webkit-animation: loading 1s ease-in-out -.5s infinite;
-    animation: loading 1s ease-in-out -.5s infinite;
-  }
+.sub-comment-btn {
+  margin-top: 10px;
+}
 
-  @keyframes loading {
-    0% {
-      width: 20%;
-    }
-    50% {
-      width: 100%;
-    }
-    100% {
-      width: 20%;
-    }
-  }
+.article-sub-comment-box {
+  margin-top: 10px;
+}
 
-  .sub-comment-btn {
-    margin-top: 10px;
-  }
+.sub-comment-input {
+  width: 640px;
+  margin-left: 40px;
+}
 
+.loader-more-comment,
+.no-comment-content {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
 
-  .article-sub-comment-box {
-    margin-top: 10px;
-  }
+.item-reply-btn:hover,
+.loader-more-comment:hover {
+  color: #1900ff;
+}
 
-  .sub-comment-input {
-    width: 640px;
-    margin-left: 40px;
-  }
+.item-reply-btn {
+  cursor: pointer;
+}
 
-  .loader-more-comment, .no-comment-content {
-    text-align: center;
-    padding: 10px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-
-  .item-reply-btn:hover, .loader-more-comment:hover {
-    color: #A612FF;
-  }
-
-  .item-reply-btn {
-    cursor: pointer;
-  }
-
-  .article-comment-reply {
-    padding: 10px;
-    background: #F5F5F5;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: auot;
-    overflow: hidden;
-    margin-left: 30px;
-
-  }
+.article-comment-reply {
+  padding: 10px;
+  background: #f5f5f5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: auot;
+  overflow: hidden;
+  margin-left: 30px;
+}
 
 .article-comment-content {
   font-size: 16px;
   margin-left: 60px;
 }
 
-.article-comment-content i{
+.article-comment-content i {
   font-size: 18px;
   margin-right: 60px;
-  color: #2d81db;
+  color: #1900ff;
 }
-.article-comment-content i:hover{
+.article-comment-content i:hover {
   color: #f8225f;
 }
 
-  .article-comment-action {
-    color: #7f828b;
-    margin-right: 30px;
-    text-align: right;
-  }
+.article-comment-action {
+  color: #7f828b;
+  margin-right: 30px;
+  text-align: right;
+}
 
-  .article-comment-user-info .user-name {
-    font-weight: 600;
-    color: #7f828b;
-    margin-left: 5px;
-    display: inline-block;
-    line-height: 30px;
-    font-size: 14px;
-  }
+.article-comment-user-info .user-name {
+  font-weight: 600;
+  color: #7f828b;
+  margin-left: 5px;
+  display: inline-block;
+  line-height: 30px;
+  font-size: 14px;
+}
 
-  .article-comment-user-info .user-name:hover {
-    color: #A612FF;
-  }
+.article-comment-user-info .user-name:hover {
+  color: #1900ff;
+}
 
-  .article-comment-user-info {
-    margin-bottom: 10px;
-  }
+.article-comment-user-info {
+  margin-bottom: 10px;
+}
 
-  .article-comment-user-info img {
-    width: 30px;
-    height: 30px;
-    display: inline-block;
-    border-radius: 50%;
-    vertical-align: middle;
-  }
+.article-comment-user-info img {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+}
 
-  #article-catalog-container {
-    max-height: 300px;
-    overflow: hidden;
-  }
+#article-catalog-container {
+  max-height: 300px;
+  overflow: hidden;
+}
 
-  .cl-link > span {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-  }
+.cl-link > span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
 
-  .cl-link > span:hover {
-    color: #A612FF;
-  }
+.cl-link > span:hover {
+  color: #1900ff;
+}
 
-  .cl-link-active > span {
-    display: block;
-    padding-left: 5px;
-    color: #A612FF !important;
-    background: #F2F2F2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-  }
+.cl-link-active > span {
+  display: block;
+  padding-left: 5px;
+  color: #1900ff !important;
+  background: #f2f2f2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
 
 #article-catalog-container ul {
   margin-left: 30px;
@@ -892,7 +909,9 @@ hr {
 }
 
 #article-content-category-box {
-  margin-top: 20px;
+  margin-top: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #454546;
 }
 
 .content-category-title {
@@ -901,13 +920,14 @@ hr {
   font-weight: 600;
 }
 
-
-#article-content-category-box li > span, #article-catalog-container li > span {
+#article-content-category-box li > span,
+#article-catalog-container li > span {
   padding-left: 5px;
   font-weight: 600;
 }
 
-#article-content-category-box li, #article-catalog-container li {
+#article-content-category-box li,
+#article-catalog-container li {
   cursor: pointer;
 }
 
@@ -916,146 +936,143 @@ hr {
   line-height: 30px;
 }
 
-  .recommend-info span {
-    margin-right: 10px;
-  }
+.recommend-info span {
+  margin-right: 10px;
+}
 
+.recommend-info a {
+  color: #7f828b;
+}
 
-  .recommend-info a {
-    color: #7f828b;
-  }
+.recommend-info {
+  font-size: 14px;
+  color: #7f828b;
+}
 
-  .recommend-info {
-    font-size: 14px;
-    color: #7f828b;
-  }
+.recommend-summary {
+  font-size: 16px;
+  color: #7f828b;
+  margin: 10px 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
 
+.recommend-title a:hover,
+.recommend-info a:hover {
+  color: #001aff96;
+}
 
-  .recommend-summary {
-    font-size: 16px;
-    color: #7f828b;
-    margin: 10px 0;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-  }
+.recommend-title a {
+  color: #47494e;
+}
 
-  .recommend-title a:hover, .recommend-info a:hover {
-    color: #A612FF;
-  }
+.recommend-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 30px;
+  font-weight: 600;
+}
 
-  .recommend-title a {
-    color: #47494e;
-  }
+.recommend-item {
+  border-bottom: #353333 solid 1px;
+  padding-bottom: 16px;
+  padding-top: 16px;
+}
 
-  .recommend-title {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    font-size: 22px;
-    line-height: 30px;
-    font-weight: 600;
-  }
+.comment-submit-btn {
+  margin-top: 10px;
+  text-align: right;
+}
 
-  .recommend-item {
-    border-bottom: #F5F5F5 solid 1px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-  }
+.article-comment-input {
+  padding: 16px;
+  background: #fff;
+  margin-bottom: 12px;
+}
 
-  .comment-submit-btn {
-    margin-top: 10px;
-    text-align: right;
-  }
+.article-comment-list {
+  background: #fff;
+  margin-bottom: 12px;
+  padding: 16px;
+}
 
-  .article-comment-input {
-    padding: 20px;
-    background: #fff;
-    margin-bottom: 20px;
-  }
+.comment-item-list {
+  margin-top: 10px;
+}
 
-  .article-comment-list {
-    background: #fff;
-    margin-bottom: 20px;
-    padding: 20px;
-  }
+.comment-input-header {
+  padding: 10px 0 12px;
+}
 
-  .comment-item-list {
-    margin-top: 10px;
-  }
+.recommend-header-title,
+.comment-input-header,
+.comment-list-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+}
 
-  .comment-input-header {
-    padding: 10px 0 20px;
-  }
+.article-recommend-box {
+  background: #fff;
+  padding: 16px;
+}
 
-  .recommend-header-title,
-  .comment-input-header,
-  .comment-list-header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #A612FF;
-  }
+.right-card-content img {
+  width: 300px;
+  height: 300px;
+}
 
-  .article-recommend-box {
-    background: #fff;
-    padding: 20px;
-  }
+#article-right-subscription-box {
+  height: 345px;
+}
 
+#article-right-taobao-ad {
+  height: 361px;
+}
 
-  .right-card-content img {
-    width: 300px;
-    height: 300px;
-  }
+.article-detail-hot-label {
+  height: 345px;
+}
 
-  #article-right-subscription-box {
-    height: 345px;
-  }
+.article-right-taobao-ad {
+  padding: 10px;
+}
 
-  #article-right-taobao-ad {
-    height: 361px;
-  }
+.article-right-card {
+  width: 300px !important;
+  margin-bottom: 12px;
+  background: #fff;
+}
 
-  .article-detail-hot-label {
-    height: 345px;
-  }
+.right-card-content .wordCloud {
+  height: 300px;
+}
 
-  .article-right-taobao-ad {
-    padding: 10px;
-  }
+.right-card-title {
+  font-size: 16px;
+  color: #000000;
+  border-bottom: #d7d8db solid 1px;
+  padding: 10px;
+  margin: 0 10px 0 10px;
+  font-weight: 600;
+}
 
-  .article-right-card {
-    width: 300px !important;
-    margin-bottom: 20px;
-    background: #fff;
-  }
+.article-detail-part .el-dialog {
+  width: fit-content;
+}
 
-  .right-card-content .wordCloud {
-    height: 300px;
-  }
+.article-detail-part .el-dialog__body {
+  padding: 10px;
+}
 
-  .right-card-title {
-    font-size: 16px;
-    color: #A612FF;
-    border-bottom: #d7d8db solid 1px;
-    padding: 10px;
-    margin: 0 10px 0 10px;
-    font-weight: 600;
-  }
-
-
-  .article-detail-part .el-dialog {
-    width: fit-content;
-  }
-
-  .article-detail-part .el-dialog__body {
-    padding: 10px;
-  }
-
-  .article-detail-part .el-dialog__header {
-    padding: 0;
-  }
+.article-detail-part .el-dialog__header {
+  padding: 0;
+}
 
 .article-content pre {
   font-weight: bold;
@@ -1066,7 +1083,6 @@ hr {
   padding: 10px 10px;
   overflow: auto;
 }
-
 
 .article-content pre code {
   font-weight: bold;
@@ -1087,9 +1103,8 @@ hr {
   color: #50a7fc;
 }
 
-
 .article-content li {
-  color: #A612FF;
+  color: #a612ff;
   font-size: 16px;
   padding: 5px;
   margin-left: 40px;
@@ -1103,13 +1118,13 @@ hr {
   color: #000;
 }
 
-.article-content p, .article-content ul {
+.article-content p,
+.article-content ul {
   line-height: 24px;
   color: #1c1c1c;
   font-size: 16px;
   padding: 5px 0;
 }
-
 
 .article-content h1 {
   color: #000000;
@@ -1133,7 +1148,6 @@ hr {
   color: #2f2f2f;
 }
 
-
 .article-content table td {
   padding: 0;
   width: 86px;
@@ -1147,7 +1161,7 @@ hr {
   height: 36px;
   vertical-align: middle;
   text-align: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border: 1px solid #ddd;
 }
 
@@ -1172,59 +1186,57 @@ hr {
   margin: 10px auto;
 }
 
-  .article-labels .el-tag {
-    margin-right: 10px;
-    cursor: pointer;
-  }
+.article-labels .el-tag {
+  margin-right: 10px;
+  cursor: pointer;
+}
 
-  .article-labels {
-    margin-left: 34px;
-    margin-top: 10px;
-    padding-bottom: 10px;
-  }
+.article-labels {
+  margin-left: 34px;
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
 
-  .article-info .user-name {
-    font-weight: 600;
-  }
+.article-info .user-name {
+  font-weight: 600;
+}
 
-  .article-info {
-    padding-left: 20px;
-    margin-top: 20px;
-  }
+.article-info {
+  padding-left: 20px;
+  margin-top: 20px;
+}
 
-  .article-info span {
-    line-height: 32px;
-    font-size: 16px;
-    color: #737F90;
-  }
+.article-info span {
+  line-height: 32px;
+  font-size: 16px;
+  color: #737f90;
+}
 
-  .article-info img {
-    width: 24px;
-    margin-right: 5px;
-    height: 24px;
-    border-radius: 50%;
-    vertical-align: middle;
-  }
+.article-info img {
+  width: 24px;
+  margin-right: 5px;
+  height: 24px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
 
-  .article-content-box {
-    background: #fff;
-    margin-bottom: 20px;
-    padding: 20px;
-  }
+.article-content-box {
+  background: #fff;
+  margin-bottom: 12px;
+  padding: 16px;
+}
 
+.article-left-part {
+  margin-right: 20px;
+  width: 820px;
+}
 
-  .article-left-part {
-    margin-right: 20px;
-    width: 820px;
-  }
+.article-right-part {
+  width: 300px;
+}
 
-  .article-right-part {
-    width: 300px;
-  }
-
-  .article-box {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
+.article-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div class="message-box">
     <div class="content-box clear-fix">
-      <div class="message-part-1 default-border-radius clear-fix">
+      <div class="message-part-1 clear-fix">
         <div class="message-title-box">
           <p style="font-family: 华文行楷">
             您想对本是人间红尘客说点什么吗
           </p>
         </div>
       </div>
-      <div class="message-input-box-content default-border-radius">
+      <div class="message-input-box-content">
         <div class="message-input-title">
           发表留言
         </div>
@@ -16,14 +16,17 @@
           <el-input
             @focus="checkLogin"
             placeholder="*请输入昵称"
-            v-model="message.userName"></el-input>
+            v-model="message.userName"
+          ></el-input>
           <el-input
             @focus="checkLogin"
             placeholder="*请输入邮箱"
-            v-model="message.email"></el-input>
+            v-model="message.email"
+          ></el-input>
           <el-input
             placeholder="您的链接地址(选填),如https://www.bugdr.cn"
-            v-model="message.http"></el-input>
+            v-model="message.http"
+          ></el-input>
         </div>
 
         <div class="message-input-content">
@@ -34,7 +37,8 @@
             v-model="message.content"
             placeholder="写一点好听的吧(づ￣ 3￣)づ"
             maxlength="256"
-            show-word-limit>
+            show-word-limit
+          >
           </el-input>
           <div class="message-input-submit">
             <el-button type="primary" @click="postMessage">
@@ -42,48 +46,77 @@
             </el-button>
           </div>
         </div>
-        </div>
+      </div>
 
       <!--      留言模块-->
-      <div class="message-list-content-box default-border-radius" id="message-list-content-box">
+      <div class="message-list-content-box" id="message-list-content-box">
         <div class="message-list-count">
-          <p>(づ￣ 3￣)づ您一共收到<span> {{messageReplyNumber}} </span>条留言 (づ￣ 3￣)づ</p>
+          <p>
+            (づ￣ 3￣)づ您一共收到<span> {{ messageReplyNumber }} </span>条留言
+            (づ￣ 3￣)づ
+          </p>
         </div>
-        <div class="message-input-box" v-for="(item,index) in messageRes" :key="index">
+        <div
+          class="message-input-box"
+          v-for="(item, index) in messageRes"
+          :key="index"
+        >
           <div class="message-parent-box">
             <div class="message-user-info">
               <a :href="item.http" target="_blank">
-                <img :src="item.avatar">
-                <span class="user-name">{{item.userName}}</span></a>
-<!--              <a :href="'/userInfo/'+item.userId" target="_blank">-->
-<!--                -->
-<!--                -->
-<!--              </a>-->
-              <el-tag size="mini" type="danger" v-if="item.state==='3'">置顶</el-tag>
-              <el-tag  size="small" v-if="item.roles === 'role_admin'">小站主人
+                <img :src="item.avatar" />
+                <span class="user-name">{{ item.userName }}</span></a
+              >
+              <el-tag size="mini" type="danger" v-if="item.state === '3'"
+                >置顶</el-tag
+              >
+              <el-tag size="small" v-if="item.roles === 'role_admin'"
+                >小站主人
               </el-tag>
-              <el-tag type="success" size="small" v-if="item.roles === 'role_normal'">小站成员
+              <el-tag
+                type="success"
+                size="small"
+                v-if="item.roles === 'role_normal'"
+                >小站成员
               </el-tag>
-              <el-tag type="info" size="small" v-if="item.roles === 'role_tourist'">游客
+              <el-tag
+                type="info"
+                size="small"
+                v-if="item.roles === 'role_tourist'"
+                >游客
               </el-tag>
-              <span class="el-icon-date">{{ item.createTime | formatDate("yyyy-MM-dd hh:mm") }}</span>
+              <span class="el-icon-date">{{
+                item.createTime | formatDate("yyyy-MM-dd hh:mm")
+              }}</span>
             </div>
             <div class="message-content">
-              <a>{{item.content}}</a>
-              <i><span class="el-icon-chat-dot-round" @click="FuReplyButton(index,item.userName)"></span></i>
+              <a>{{ item.content }}</a>
+              <i
+                ><span
+                  class="el-icon-chat-dot-round"
+                  @click="FuReplyButton(index, item.userName)"
+                ></span
+              ></i>
             </div>
-            <div class="message-sub-box" style="display: none;" :id="'sub_input_'+index">
+            <div
+              class="message-sub-box"
+              style="display: none;"
+              :id="'sub_input_' + index"
+            >
               <div class="message-input-userinfo">
                 <el-input
                   @focus="checkLogin"
                   placeholder="*请输入昵称"
-                  v-model="subMessage.userName"></el-input>
+                  v-model="subMessage.userName"
+                ></el-input>
                 <el-input
                   placeholder="*请输入邮箱"
-                  v-model="subMessage.email"></el-input>
+                  v-model="subMessage.email"
+                ></el-input>
                 <el-input
-                  placeholder="您的链接地址(选填),如https://www.bugdr.cn"
-                  v-model="subMessage.http"></el-input>
+                  placeholder="您的链接地址(选填)"
+                  v-model="subMessage.http"
+                ></el-input>
               </div>
               <div class="message-input-content">
                 <el-input
@@ -93,51 +126,82 @@
                   :placeholder="subMessagePlaceholder"
                   v-model="subMessage.content"
                   maxlength="256"
-                  show-word-limit>
+                  show-word-limit
+                >
                 </el-input>
               </div>
               <div class="message-input-submit-1">
-                <el-button type="primary" @click="doCommitMessageReply(item.id,item.userName,item.email)">
-                  回复</el-button>
+                <el-button
+                  type="primary"
+                  @click="
+                    doCommitMessageReply(item.id, item.userName, item.email)
+                  "
+                >
+                  回复</el-button
+                >
               </div>
             </div>
           </div>
-          <div class="message-child-box" v-for="(item1,index1) in messageReplyRes" :key="index1"
-               v-if="item.id===item1.parentId">
+          <div
+            class="message-child-box"
+            v-for="(item1, index1) in messageReplyRes"
+            :key="index1"
+            v-if="item.id === item1.parentId"
+          >
             <div class="message-user-info">
-<!--              <a :href="'/userInfo/'+item1.userId" target="_blank">-->
-<!--                <img :src="item1.avatar">-->
-<!--                <span class="user-name">{{item1.userName}}</span>-->
-<!--              </a>-->
               <a :href="item1.http" target="_blank">
-                <img :src="item1.avatar">
-                <span class="user-name">{{item1.userName}}</span></a>
-              <el-tag  size="small" v-if="item1.roles === 'role_admin'">小站主人
+                <img :src="item1.avatar" />
+                <span class="user-name">{{ item1.userName }}</span></a
+              >
+              <el-tag size="small" v-if="item1.roles === 'role_admin'"
+                >小站主人
               </el-tag>
-              <el-tag type="success" size="small" v-if="item1.roles === 'role_normal'">小站成员
+              <el-tag
+                type="success"
+                size="small"
+                v-if="item1.roles === 'role_normal'"
+                >小站成员
               </el-tag>
-              <el-tag type="info" size="small" v-if="item1.roles === 'role_tourist'">游客
+              <el-tag
+                type="info"
+                size="small"
+                v-if="item1.roles === 'role_tourist'"
+                >游客
               </el-tag>
               <span style="line-height: 24px">回复</span>
-              <span class="user-name">{{ item1.parentUserName}}</span>
-              <span class="el-icon-date">{{ item1.createTime | formatDate("yyyy-MM-dd hh:mm") }}</span>
+              <span class="user-name">{{ item1.parentUserName }}</span>
+              <span class="el-icon-date">{{
+                item1.createTime | formatDate("yyyy-MM-dd hh:mm")
+              }}</span>
             </div>
             <div class="message-child-content">
               <span>{{ item1.content }}</span>
-              <i><span class="el-icon-chat-dot-round" @click="replyChildMessage(index1,item1.userName)"></span></i>
+              <i
+                ><span
+                  class="el-icon-chat-dot-round"
+                  @click="replyChildMessage(index1, item1.userName)"
+                ></span
+              ></i>
             </div>
-            <div class="message-sub-comment-box" style="display: none;" :id="'sub_input_child_' + index1">
+            <div
+              class="message-sub-comment-box"
+              style="display: none;"
+              :id="'sub_input_child_' + index1"
+            >
               <div class="message-child-input-userinfo">
                 <el-input
                   @focus="checkLogin"
                   placeholder="*请输入昵称"
-                  v-model="subMessage.userName"></el-input>
+                  v-model="subMessage.userName"
+                ></el-input>
                 <el-input
                   placeholder="*请输入邮箱"
-                  v-model="subMessage.email"></el-input>
+                  v-model="subMessage.email"
+                ></el-input>
                 <el-input
                   placeholder="您的链接地址(选填),如http://www.bugdr.cn"
-                  v-model="subMessage.http"></el-input>
+                  v-model="subMessage.http"
+                ></el-input>
               </div>
               <div class="message-child-input-content">
                 <el-input
@@ -147,16 +211,23 @@
                   :placeholder="subMessagePlaceholder"
                   v-model="subMessage.content"
                   maxlength="256"
-                  show-word-limit>
+                  show-word-limit
+                >
                 </el-input>
               </div>
               <div class="message-child-input-submit">
-                <el-button type="primary" @click="doCommitMessageReply(item.id,item.userName,item.email)">
-                  留言</el-button>
+                <el-button
+                  type="primary"
+                  @click="
+                    doCommitMessageReply(item.id, item.userName, item.email)
+                  "
+                >
+                  留言</el-button
+                >
               </div>
             </div>
           </div>
-          <hr>
+          <hr />
         </div>
         <div class="message-navigation-bar">
           <el-pagination
@@ -166,7 +237,8 @@
             :current-page="pageNavigation.currentPage"
             :page-size="pageNavigation.pageSize"
             layout="prev, pager, next"
-            :total="pageNavigation.totalCount">
+            :total="pageNavigation.totalCount"
+          >
           </el-pagination>
         </div>
       </div>
@@ -175,324 +247,317 @@
 </template>
 
 <script>
-  import * as api from "../../api/api";
-  import {success_code} from "../../api/api";
+import * as api from "../../api/api";
+import { success_code } from "../../api/api";
 
-  let lastInputBox = null;
-  export default {
-
-    head() {
-      return {
-        title: '本是人间红尘客-留言',
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: '本是人间红尘客-留言'
-          },
-          {
-            hid: 'keywords',
-            name: 'keywords',
-            content: '本是人间红尘客,Java,android,开发,毕业设计,博客系统,程序员'
-          }
-        ]
-      }
-    },
-
-      async asyncData({params}) {
-        //加载第一页评论
-        let messageResult = await api.getMessageList(1, 10)
-        let messageReplyResult = await api.getMessageReplyList(1, 100)
-
-        let pageNavigation = {
-          currentPage: messageResult.data.currentPage,
-          totalCount: messageResult.data.totalElements,
-          pageSize: messageResult.data.pageSize,
-        };
-        return {
-          pageNavigation: pageNavigation,
-          messageRes: messageResult.data.content,
-          messageReplyRes: messageReplyResult.data.content,
-        }
-      },
-    data() {
-      return {
-        currentPage: 1,
-        pageSize: 20,
-        messageNumber:'',
-        messageReplyNumber:'',
-        subMessagePlaceholder: '请文明回复',
-        loading: false,
-        dialogVisible: false,
-        message: {
-          userId: '',
-          userName: '',
-          content: '',
-          email: '',
-          http: '',
-          avatar: ''
+let lastInputBox = null;
+export default {
+  head() {
+    return {
+      title: "本是人间红尘客-留言",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "本是人间红尘客-留言"
         },
-        subMessage: {
-          userId: '',
-          userName: '',
-          content: '',
-          parentUserName: '',
-          parentId: '',
-          email: '',
-          http: '',
-          avatar: ''
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "本是人间红尘客,Java,android,开发,毕业设计,博客系统,程序员"
         }
+      ]
+    };
+  },
+
+  async asyncData({ params }) {
+    //加载第一页评论
+    let messageResult = await api.getMessageList(1, 10);
+    let messageReplyResult = await api.getMessageReplyList(1, 100);
+
+    let pageNavigation = {
+      currentPage: messageResult.data.currentPage,
+      totalCount: messageResult.data.totalElements,
+      pageSize: messageResult.data.pageSize
+    };
+    return {
+      pageNavigation: pageNavigation,
+      messageRes: messageResult.data.content,
+      messageReplyRes: messageReplyResult.data.content
+    };
+  },
+  data() {
+    return {
+      currentPage: 1,
+      pageSize: 20,
+      messageNumber: "",
+      messageReplyNumber: "",
+      subMessagePlaceholder: "请文明回复",
+      loading: false,
+      dialogVisible: false,
+      message: {
+        userId: "",
+        userName: "",
+        content: "",
+        email: "",
+        http: "",
+        avatar: ""
+      },
+      subMessage: {
+        userId: "",
+        userName: "",
+        content: "",
+        parentUserName: "",
+        parentId: "",
+        email: "",
+        http: "",
+        avatar: ""
+      }
+    };
+  },
+  methods: {
+    onPageChange(page) {
+      this.getMessage(page);
+      let messageList = document.getElementById("message-list-content-box");
+      if (messageList) {
+        messageList.scrollIntoView({
+          block: "start",
+          behavior: "smooth"
+        });
       }
     },
-    methods: {
-      onPageChange(page) {
-        this.getMessage(page)
-        let messageList = document.getElementById('message-list-content-box');
-        if (messageList) {
-          messageList.scrollIntoView({
-            block: 'start',
-            behavior: 'smooth'
-          })
-        }
-      },
 
-      doCommitMessageReply(id,name,email) {
-        //检查数据是否为空
-        this.checkLogin()
-        if (this.subMessage.content === '') {
-          this.$message.error('您还没有写评论啊哦o(╥﹏╥)o');
-          return;
+    doCommitMessageReply(id, name, email) {
+      //检查数据是否为空
+      this.checkLogin();
+      if (this.subMessage.content === "") {
+        this.$message.error("您还没有写评论啊哦o(╥﹏╥)o");
+        return;
+      }
+      this.subMessage.parentId = id;
+      this.subMessage.parentUserName = name;
+      this.subMessage.email = email;
+      //校验邮箱格式
+      let reg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
+      if (!reg.test(this.subMessage.email)) {
+        this.$message.error("邮箱格式错误");
+        return;
+      }
+      api.postMessageReply(this.subMessage).then(result => {
+        if (result.code === success_code) {
+          this.$message.success(result.message);
+          this.getMessageReply();
+          this.resetMessage();
+          this.getMessageReplyCount();
+        } else {
+          this.$message.error(result.message);
         }
-        this.subMessage.parentId=id;
-        this.subMessage.parentUserName=name;
-        this.subMessage.email=email;
-        //校验邮箱格式
-        let reg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
-        if (!reg.test(this.subMessage.email)) {
-          this.$message.error("邮箱格式错误");
-          return;
-        }
-        api.postMessageReply(this.subMessage).then(result=>{
-          if (result.code === success_code) {
-            this.$message.success(result.message);
-            this.getMessageReply();
-            this.resetMessage();
-            this.getMessageReplyCount();
+      });
+    },
 
-          }else {
-            this.$message.error(result.message);
-          }
-        })
-      },
+    resetMessage() {
+      this.message.content = "";
+      this.message.userName = "";
+      this.message.email = "";
+      this.message.avatar = "";
+      this.subMessage.userName = "";
+      this.subMessage.email = "";
+      this.subMessage.avatar = "";
+      if (lastInputBox) {
+        lastInputBox.style.display = "none";
+      }
+    },
 
-      resetMessage() {
-        this.message.content = '';
-        this.message.userName='';
-        this.message.email='';
-        this.message.avatar='';
-        this.subMessage.userName='';
-        this.subMessage.email='';
-        this.subMessage.avatar='';
+    //提交回复按钮
+    replyChildNewComment(index, userName) {
+      this.checkLogin();
+      let subInputBox = document.getElementById("sub_input_child_" + index);
+      this.subMessage.content = "";
+      this.subMessagePlaceholder = "回复@" + userName;
+      if (subInputBox) {
         if (lastInputBox) {
-          lastInputBox.style.display = 'none';
+          lastInputBox.style.display = "none";
         }
-      },
-
-      //提交回复按钮
-      replyChildNewComment(index, userName) {
-        this.checkLogin()
-        let subInputBox = document.getElementById('sub_input_child_' + index);
-        this.subMessage.content='';
-        this.subMessagePlaceholder = '回复@' + userName;
-        if (subInputBox) {
-          if (lastInputBox) {
-            lastInputBox.style.display = 'none';
-          }
-          lastInputBox = subInputBox;
-          subInputBox.style.display = 'block';
-        }
-      },
-
-      checkLogin() {
-        //检查是否有效
-        api.checkToken().then(result => {
-          //console.log(result)
-          if (result.code === success_code) {
-            //跳转登录界面
-            // location.href = "/login?redirect=" + location.href;
-            this.comment.userName = result.data.userName;
-            this.comment.avatar = result.data.avatar;
-          }
-          // if (result.data.roles === 'role_admin') {
-          //   this.subComment.isAdmin = '1';
-          // } else {
-          //   this.subComment.isAdmin = '0';
-          // }
-        });
-      },
-
-      replyChildMessage(index, userName) {
-        this.checkLogin()
-        let subInputBox = document.getElementById('sub_input_child_' + index);
-        this.subMessage.content='';
-        this.subCommentPlaceholder = '回复@' + userName;
-        if (subInputBox) {
-          if (lastInputBox) {
-            lastInputBox.style.display = 'none';
-          }
-          lastInputBox = subInputBox;
-          subInputBox.style.display = 'block';
-        }
-      },
-
-      //留言
-      FuReplyButton(index, userName) {
-        this.checkLogin()
-        // this.checkLogin1();
-        let subInputBox = document.getElementById('sub_input_' + index);
-        this.subMessage.content='';
-        this.subCommentPlaceholder = '回复@' + userName;
-        if (subInputBox) {
-          if (lastInputBox) {
-            lastInputBox.style.display = 'none';
-          }
-          lastInputBox = subInputBox;
-          subInputBox.style.display = 'block';
-        }
-      },
-      getUserInfo() {
-        api.getUserInfoByToken().then(result => {
-          if (result.code === api.success_code) {
-            api.getUserInfo(result.data.id).then(result => {
-              if (result.code === api.success_code) {
-                this.message.userName = result.data.userName;
-                this.message.email = result.data.email;
-                this.message.avatar = result.data.avatar;
-                this.subMessage.userName = result.data.userName;
-                this.subMessage.email = result.data.email;
-                this.subMessage.avatar = result.data.avatar;
-              }
-            })
-          }
-        })
-      },
-      messageList() {
-        api.getMessageList().then(result => {
-          if (result.code === api.success_code) {
-            this.messageResultList = result.data;
-          }
-        })
-      },
-      resetDataChildMessage(){
-        this.subMessage.userName = '';
-        this.subMessage.content = '';
-        this.subMessage.email = '';
-        this.subMessage.http = '';
-        this.subMessage.avatar = '';
-        this.subMessage.parentId = '';
-        this.subMessage.parentUserName = '';
-      },
-      resetData() {
-        this.message.userName = '';
-        this.message.content = '';
-        this.message.email = '';
-        this.message.http = '';
-        this.message.avatar = '';
-      },
-
-      getMessageCounts(){
-        api.getMessageCounts().then(result=>{
-          if (result.code === success_code) {
-            this.messageNumber=result.data
-          }
-        })
-      },
-      getMessageReplyCount(){
-        api.getMessageReplyCount().then(result=>{
-          if (result.code === success_code) {
-            this.messageReplyNumber=result.data
-          }
-        })
-      },
-
-      getMessageReply(){
-        api.getMessageReplyList(1,20).then(result=>{
-          if (result.code === success_code) {
-            this.messageReplyRes = result.data.content;
-          }
-        })
-      },
-      getMessage(page) {
-        api.getMessageList(page, this.pageSize).then(result => {
-          if (result.code === success_code) {
-            this.messageRes = result.data.content
-          }
-        })
-      },
-
-      postMessage() {
-        if (this.message.userName === '') {
-          this.$message.error("起一个昵称吧")
-          return;
-        }
-        if (this.message.email === '') {
-          this.$message.error("邮箱地址不可以为空")
-          return;
-        }
-        //校验邮箱格式
-        let reg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
-        if (!reg.test(this.message.email)) {
-          this.$message.error("邮箱格式错误");
-          return;
-        }
-        if (this.message.content === '') {
-          this.$message.error("留言内容不可为空")
-          return;
-        }
-        this.loading = true;
-        api.postMessage(this.message).then(result => {
-          this.loading = false;
-          if (result.code === api.success_code) {
-            this.$message.success("留言成功，已经通知博主");
-            this.getMessage(1)
-            let messageList = document.getElementById('message-list-content-box');
-            if (messageList) {
-              messageList.scrollIntoView({
-                block: 'start',
-                behavior: 'smooth'
-              })
-            }
-            this.resetMessage();
-            this.getMessageCounts();
-          }else{
-            this.$message.error(result.message);
-          }
-
-            this.messageList();
-            this.resetData();
-
-
-        });
-        this.getUserInfo();
+        lastInputBox = subInputBox;
+        subInputBox.style.display = "block";
       }
     },
-    mounted() {
-      this.$store.commit("setCurrentActivityTab", "message");
-      this.getUserInfo();
-      this.getMessageCounts();
-      this.getMessageReplyCount();
-    }
-  }
 
+    checkLogin() {
+      //检查是否有效
+      api.checkToken().then(result => {
+        //console.log(result)
+        if (result.code === success_code) {
+          //跳转登录界面
+          // location.href = "/login?redirect=" + location.href;
+          this.comment.userName = result.data.userName;
+          this.comment.avatar = result.data.avatar;
+        }
+        // if (result.data.roles === 'role_admin') {
+        //   this.subComment.isAdmin = '1';
+        // } else {
+        //   this.subComment.isAdmin = '0';
+        // }
+      });
+    },
+
+    replyChildMessage(index, userName) {
+      this.checkLogin();
+      let subInputBox = document.getElementById("sub_input_child_" + index);
+      this.subMessage.content = "";
+      this.subCommentPlaceholder = "回复@" + userName;
+      if (subInputBox) {
+        if (lastInputBox) {
+          lastInputBox.style.display = "none";
+        }
+        lastInputBox = subInputBox;
+        subInputBox.style.display = "block";
+      }
+    },
+
+    //留言
+    FuReplyButton(index, userName) {
+      this.checkLogin();
+      // this.checkLogin1();
+      let subInputBox = document.getElementById("sub_input_" + index);
+      this.subMessage.content = "";
+      this.subCommentPlaceholder = "回复@" + userName;
+      if (subInputBox) {
+        if (lastInputBox) {
+          lastInputBox.style.display = "none";
+        }
+        lastInputBox = subInputBox;
+        subInputBox.style.display = "block";
+      }
+    },
+    getUserInfo() {
+      api.getUserInfoByToken().then(result => {
+        if (result.code === api.success_code) {
+          api.getUserInfo(result.data.id).then(result => {
+            if (result.code === api.success_code) {
+              this.message.userName = result.data.userName;
+              this.message.email = result.data.email;
+              this.message.avatar = result.data.avatar;
+              this.subMessage.userName = result.data.userName;
+              this.subMessage.email = result.data.email;
+              this.subMessage.avatar = result.data.avatar;
+            }
+          });
+        }
+      });
+    },
+    messageList() {
+      api.getMessageList().then(result => {
+        if (result.code === api.success_code) {
+          this.messageResultList = result.data;
+        }
+      });
+    },
+    resetDataChildMessage() {
+      this.subMessage.userName = "";
+      this.subMessage.content = "";
+      this.subMessage.email = "";
+      this.subMessage.http = "";
+      this.subMessage.avatar = "";
+      this.subMessage.parentId = "";
+      this.subMessage.parentUserName = "";
+    },
+    resetData() {
+      this.message.userName = "";
+      this.message.content = "";
+      this.message.email = "";
+      this.message.http = "";
+      this.message.avatar = "";
+    },
+
+    getMessageCounts() {
+      api.getMessageCounts().then(result => {
+        if (result.code === success_code) {
+          this.messageNumber = result.data;
+        }
+      });
+    },
+    getMessageReplyCount() {
+      api.getMessageReplyCount().then(result => {
+        if (result.code === success_code) {
+          this.messageReplyNumber = result.data;
+        }
+      });
+    },
+
+    getMessageReply() {
+      api.getMessageReplyList(1, 20).then(result => {
+        if (result.code === success_code) {
+          this.messageReplyRes = result.data.content;
+        }
+      });
+    },
+    getMessage(page) {
+      api.getMessageList(page, this.pageSize).then(result => {
+        if (result.code === success_code) {
+          this.messageRes = result.data.content;
+        }
+      });
+    },
+
+    postMessage() {
+      if (this.message.userName === "") {
+        this.$message.error("起一个昵称吧");
+        return;
+      }
+      if (this.message.email === "") {
+        this.$message.error("邮箱地址不可以为空");
+        return;
+      }
+      //校验邮箱格式
+      let reg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
+      if (!reg.test(this.message.email)) {
+        this.$message.error("邮箱格式错误");
+        return;
+      }
+      if (this.message.content === "") {
+        this.$message.error("留言内容不可为空");
+        return;
+      }
+      this.loading = true;
+      api.postMessage(this.message).then(result => {
+        this.loading = false;
+        if (result.code === api.success_code) {
+          this.$message.success("留言成功，已经通知博主");
+          this.getMessage(1);
+          let messageList = document.getElementById("message-list-content-box");
+          if (messageList) {
+            messageList.scrollIntoView({
+              block: "start",
+              behavior: "smooth"
+            });
+          }
+          this.resetMessage();
+          this.getMessageCounts();
+        } else {
+          this.$message.error(result.message);
+        }
+
+        this.messageList();
+        this.resetData();
+      });
+      this.getUserInfo();
+    }
+  },
+  mounted() {
+    this.$store.commit("setCurrentActivityTab", "message");
+    this.getUserInfo();
+    this.getMessageCounts();
+    this.getMessageReplyCount();
+  }
+};
 </script>
 
 <style>
-
 .message-input-box-content {
-  padding-top: 10px;
+  padding: 16px;
   background: #fff;
-  padding-bottom: 10px;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 hr {
@@ -518,18 +583,17 @@ hr {
   margin-bottom: 10px;
 }
 
-
 .message-child-content {
   font-size: 16px;
   margin-left: 60px;
 }
 
-.message-child-content i{
+.message-child-content i {
   font-size: 16px;
   margin-right: 60px;
   color: #2d81db;
 }
-.message-child-content i:hover{
+.message-child-content i:hover {
   color: #f8225f;
 }
 
@@ -546,22 +610,22 @@ hr {
 .message-child-input-userinfo {
   padding-left: 80px;
 }
-.message-child-input-userinfo .el-input{
+.message-child-input-userinfo .el-input {
   width: 280px;
   margin-left: 30px;
   margin-top: 20px;
   border-radius: 8px;
 }
 
-.message-child-input-userinfo .el-input .el-input__inner{
+.message-child-input-userinfo .el-input .el-input__inner {
   border: 1px solid #4e65f8;
 }
 
-.message-child-input-content .el-textarea .el-textarea__inner{
+.message-child-input-content .el-textarea .el-textarea__inner {
   border: 1px solid #4e65f8;
 }
 
-.message-child-input-submit{
+.message-child-input-submit {
   margin-left: 950px;
   margin-top: 20px;
 }
@@ -583,14 +647,14 @@ hr {
   margin-top: 20px;
 }
 
-.message-child-input-content .el-textarea .el-textarea__inner{
+.message-child-input-content .el-textarea .el-textarea__inner {
   border: 1px solid #4e65f8;
 }
 .message-input-content .el-textarea .el-textarea__inner {
   border: 1px solid #4e65f8;
 }
 
-.message-child-input-userinfo .el-input .el-input__inner{
+.message-child-input-userinfo .el-input .el-input__inner {
   border: 1px solid #4e65f8;
 }
 .message-input-userinfo .el-input .el-input__inner {
@@ -610,27 +674,22 @@ hr {
 }
 
 .message-input-title {
-  padding-left: 10px;
-  margin-top: 10px;
   font-size: 18px;
   font-weight: 600;
-  color: #4e65f8;
+  color: #000;
 }
 
 .message-input-box {
-  /*margin-top: 20px;*/
   background: #fff;
-  margin-left: 10px;
-  border-radius: 8px;
-  margin-bottom: 20px;
 }
-
 
 .message-navigation-bar {
   text-align: center;
 }
 
-.message-navigation-bar .el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
+.message-navigation-bar .el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li {
   background-color: #ffffff;
 }
 
@@ -639,22 +698,22 @@ hr {
   margin-left: 60px;
 }
 
-.message-content i{
+.message-content i {
   font-size: 14px;
   margin-right: 60px;
   color: #2d81db;
 }
-.message-content i:hover{
+.message-content i:hover {
   color: #f8225f;
 }
 
- .message-child-content i{
+.message-child-content i {
   font-size: 20px;
   margin-right: 60px;
   color: #2d81db;
 }
 
-.message-child-content i:hover{
+.message-child-content i:hover {
   color: #f8225f;
 }
 
@@ -686,35 +745,31 @@ hr {
   vertical-align: middle;
 }
 
+.item-one .tag-role1 .el-tag {
+  color: #fff;
+}
 
+.dialog .el-dialog {
+  border-radius: 8px;
+}
 
-  .item-one .tag-role1 .el-tag{
-    color: #fff;
-  }
+.message-user-info {
+  color: #47494e;
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-top: 12px;
+}
 
-  .dialog .el-dialog {
-    border-radius: 8px;
-  }
-
-
-  .message-user-info {
-    color: #47494e;
-    font-size: 16px;
-    margin-bottom: 10px;
-    margin-top: 12px;
-    margin-left: 20px;
-  }
-
-.message-user-info .user-name{
+.message-user-info .user-name {
   color: #5680ef;
   font-size: 16px;
-  }
-.message-user-info .user-name:hover{
+}
+.message-user-info .user-name:hover {
   color: #373b3b;
   font-size: 16px;
-  }
+}
 
-.message-user-info img{
+.message-user-info img {
   width: 30px;
   height: 30px;
   display: inline-block;
@@ -722,33 +777,30 @@ hr {
   vertical-align: middle;
 }
 
-  .message-title-box p {
-    font-weight: 600;
-    font-size: 40px;
-    margin-top: 5px;
-  }
+.message-title-box p {
+  font-weight: 600;
+  font-size: 40px;
+  margin-top: 5px;
+}
 
+.message-title-box {
+  color: #000;
+  text-align: center;
+  margin: 15px 15px 15px 0px;
+}
 
-  .message-title-box {
-    color: #42b7ff;
-    text-align: center;
-    margin: 15px 15px 15px 0px;
-  }
+.message-box {
+  margin-top: 20px;
+}
 
-  .message-box {
-    margin-top: 20px;
-  }
+.message-list-content-box {
+  margin-top: 12px;
+  background: #fff;
+  padding: 16px;
+  margin-bottom: 12px;
+}
 
-  .message-list-content-box {
-    margin-top: 20px;
-    background: #fff;
-    margin-bottom: 20px;
-    padding-bottom: 30px;
-  }
-
-  .message-part-1 {
-    background: #fff;
-    margin-bottom: 20px;
-  }
-
+.message-part-1 {
+  background: #fff;
+}
 </style>

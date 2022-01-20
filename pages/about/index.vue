@@ -1,7 +1,11 @@
 <template>
-  <div class="about-box default-border-radius clear-fix" id="about-box">
+  <div class="about-box  clear-fix" id="about-box">
     <div class="about-left-part float-left" id="about-left-part">
-      <el-tabs tab-position="left" v-model="target" @tab-click="onLeftItemClick">
+      <el-tabs
+        tab-position="left"
+        v-model="target"
+        @tab-click="onLeftItemClick"
+      >
         <el-tab-pane label="本是人间红尘客(about)" name="about"></el-tab-pane>
         <el-tab-pane label="心情寄语(message)" name="message"></el-tab-pane>
         <el-tab-pane label="我们的愿景(vision)" name="vision"></el-tab-pane>
@@ -27,9 +31,7 @@
           心情寄语
         </h1>
         <p>
-          你站在桥上看风景，
-          看风景的人在楼上看你。
-          明月装饰了你的窗子，
+          你站在桥上看风景， 看风景的人在楼上看你。 明月装饰了你的窗子，
           你装饰了别人的梦。
         </p>
       </div>
@@ -48,14 +50,20 @@
         <div class="websites">
           <ul>
             <li>
-              <a href="http://www.bugdr.cn" target="_blank">本是人间红尘客主站</a>
+              <a href="https://www.romance-to-death.top/" target="_blank"
+                >本是人间红尘客主站</a
+              >
             </li>
-            <!--<li>-->
-              <!--<a href="https://shop.sunofbeach.net" target="_blank">阳光沙滩商城</a>-->
-            <!--</li>-->
-            <!--<li>-->
-              <!--<a href="https://sunofbeach.taobao.com" target="_blank">阳光沙滩网店</a>-->
-            <!--</li>-->
+            <li>
+              <a href="https://mu.romance-to-death.top/#/home" target="_blank"
+                >在线音乐网站</a
+              >
+            </li>
+            <li>
+              <a href="https://shop.romance-to-death.top/" target="_blank"
+                >本是人间红尘客商城</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -65,267 +73,259 @@
         </h1>
         <p class="contact">
           广告投放（来日方长）
-          <br>
+          <br />
           商务合作（来日方长）
-          <br>
+          <br />
           内容反馈（来日方长）
         </p>
       </div>
       <div class="about-img">
-        <img src="/gongzhonghao.png">
+        <img src="/gongzhonghao.png" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    head() {
-      return {
-        title: '本是人间红尘客-关于',
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: '本是人间红尘客-关于'
-          },
-          {
-            hid: 'keywords',
-            name: 'keywords',
-            content: '本是人间红尘客,java,android,开发,毕业设计,博客系统,程序员'
-          }
-        ]
-      }
-    },
-    data() {
-      return {
-        target: 'about',
-        contentHeaders: [],
-        isClickLeftSwitch: false,
-      };
-    },
-    methods: {
-      onLeftItemClick() {
-        this.isClickLeftSwitch = true;
-        this.$router.push({
-          path: '/about#' + this.target
-        });
-        // console.log(this.target);
-      },
-      onWindowScroll() {
-        let dy = document.documentElement.scrollTop;
-        let dx = document.documentElement.scrollLeft;
-        let leftBox = document.getElementById('about-left-part');
-        let parentBox = document.getElementById('about-box');
-        if (leftBox && parentBox) {
-          let parentBoxTop = parentBox.offsetTop;
-          // console.log(parentBoxTop);
-          if (dy > parentBoxTop) {
-            leftBox.style.top = '0px';
-          } else {
-            leftBox.style.top = (parentBoxTop - dy) + 'px';
-          }
-          //处理横向滑动
-          if (dx > 0) {
-            leftBox.style.left = -dx + "px";
-          } else {
-            leftBox.style.left = parentBox.offsetLeft + "px";
-          }
+export default {
+  head() {
+    return {
+      title: "本是人间红尘客-关于",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "本是人间红尘客-关于"
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: "本是人间红尘客,java,android,开发,毕业设计,博客系统,程序员"
         }
-        if (!this.isClickLeftSwitch) {
-          //处理标签的滚动范围
-          for (let i = 0; i < this.contentHeaders.length - 1; i++) {
-            let first = this.contentHeaders[i];
-            let second = this.contentHeaders[i + 1];
-            if (dy >= first.offTop && dy < second.offTop) {
-              this.target = first.id;
-              //console.log(this.target);
-              break;
-            }
-          }
-        } else {
-          this.isClickLeftSwitch = false;
-        }
-        //console.log("scroll...");
-        // if (dy === 0) {
-        //
-        // }
-      }
-    },
-    beforeDestroy() {
-      window.removeEventListener('scroll', this.onWindowScroll);
-    },
-    mounted() {
-      //处理内容部分的H1标签距离，如果是后台获取数据
-      //那就在数据获取完以后进行处理
-      let rightContent = document.getElementById('about-right-part');
-      let h1List = rightContent.querySelectorAll('h1');
-      h1List.forEach(item => {
-        this.contentHeaders.push({
-          offTop: item.offsetTop,
-          id: item.id
-        });
-        //console.log(item.id);
+      ]
+    };
+  },
+  data() {
+    return {
+      target: "about",
+      contentHeaders: [],
+      isClickLeftSwitch: false
+    };
+  },
+  methods: {
+    onLeftItemClick() {
+      this.isClickLeftSwitch = true;
+      this.$router.push({
+        path: "/about#" + this.target
       });
-
-      let that = this;
-      window.onresize = function () {
-        that.onWindowScroll();
-      };
-      window.addEventListener("scroll", this.onWindowScroll);
-      this.$store.commit("setCurrentActivityTab", "about");
-      this.onWindowScroll();
+      // console.log(this.target);
     },
-  };
+    onWindowScroll() {
+      let dy = document.documentElement.scrollTop;
+      let dx = document.documentElement.scrollLeft;
+      let leftBox = document.getElementById("about-left-part");
+      let parentBox = document.getElementById("about-box");
+      if (leftBox && parentBox) {
+        let parentBoxTop = parentBox.offsetTop;
+        // console.log(parentBoxTop);
+        if (dy > parentBoxTop) {
+          leftBox.style.top = "0px";
+        } else {
+          leftBox.style.top = parentBoxTop - dy + "px";
+        }
+        //处理横向滑动
+        if (dx > 0) {
+          leftBox.style.left = -dx + "px";
+        } else {
+          leftBox.style.left = parentBox.offsetLeft + "px";
+        }
+      }
+      if (!this.isClickLeftSwitch) {
+        //处理标签的滚动范围
+        for (let i = 0; i < this.contentHeaders.length - 1; i++) {
+          let first = this.contentHeaders[i];
+          let second = this.contentHeaders[i + 1];
+          if (dy >= first.offTop && dy < second.offTop) {
+            this.target = first.id;
+            //console.log(this.target);
+            break;
+          }
+        }
+      } else {
+        this.isClickLeftSwitch = false;
+      }
+      //console.log("scroll...");
+      // if (dy === 0) {
+      //
+      // }
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onWindowScroll);
+  },
+  mounted() {
+    //处理内容部分的H1标签距离，如果是后台获取数据
+    //那就在数据获取完以后进行处理
+    let rightContent = document.getElementById("about-right-part");
+    let h1List = rightContent.querySelectorAll("h1");
+    h1List.forEach(item => {
+      this.contentHeaders.push({
+        offTop: item.offsetTop,
+        id: item.id
+      });
+      //console.log(item.id);
+    });
+
+    let that = this;
+    window.onresize = function() {
+      that.onWindowScroll();
+    };
+    window.addEventListener("scroll", this.onWindowScroll);
+    this.$store.commit("setCurrentActivityTab", "about");
+    this.onWindowScroll();
+  }
+};
 </script>
 
 <style>
+.about-left-part,
+.el-tabs {
+  font-family: 华文行楷;
+  font-size: 24px;
+}
 
+.about-item p {
+  font-family: 华文行楷;
+  font-size: 20px;
+  color: #444444;
+}
 
-  .about-left-part,.el-tabs{
-    font-family: 华文行楷;
-    font-size: 24px;
-  }
+.about-item h1 {
+  font-family: 华文行楷;
+  color: #000000;
+  font-size: 22px;
+  font-weight: 600;
+}
 
-  .about-item p {
-    font-family: 华文行楷;
-    font-size: 20px;
-    color: #444444;
-  }
+.about-box {
+  /*background: #e8f3ff;*/
+  margin-top: 60px;
+  /* margin-bottom: 20px; */
+}
 
-  .about-item h1{
-    font-family: 华文行楷;
-    color: #85A4F1;
-    font-size: 22px;
-    font-weight: 600;
-  }
+.about-left-part .el-tabs--left .el-tabs__header.is-left {
+  margin-right: 0;
+}
 
-  #about-left-part {
-    top: 91px;
-    position: fixed;
-  }
+.about-item .contact {
+  color: #444444;
+}
 
-  .about-box {
-    /*background: #e8f3ff;*/
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+.about-left-part .el-tabs__item {
+  border-right: 1px dashed #e0e0e0;
+  height: fit-content;
+  color: #ffffff;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 20px;
+  transition: all 0.3s;
+}
 
-  .about-left-part .el-tabs--left .el-tabs__header.is-left {
-    margin-right: 0;
-  }
+.about-left-part .el-tabs__nav {
+  padding-right: 30px;
+}
 
-  .about-item .contact {
-    color: #444444;
-  }
+.about-left-part .el-tabs__item.is-active {
+  color: #f53d3d;
+  font-size: 24px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
 
-  .about-left-part .el-tabs__item {
-    border-right: 1px dashed #e0e0e0;
-    height: fit-content;
-    color: #ffffff;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    font-size: 20px;
-    transition: all .3s;
-  }
+.about-left-part .el-tabs__item.is-active::after {
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  right: -20px;
+  width: 27px;
+  height: 27px;
+  border: 6px solid #8da8f1;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background-color: #fff;
+  -webkit-transform: scale(0.5);
+  -moz-transform: scale(0.5);
+  -ms-transform: scale(0.5);
+  transform: scale(0.5);
+}
 
-  .about-left-part .el-tabs__nav {
-    padding-right: 30px;
-  }
+.about-left-part .el-tabs__nav-wrap::after {
+  background: rgba(0, 0, 0, 0);
+}
 
-  .about-left-part .el-tabs__item.is-active {
-    color: #586bff;
-    font-size: 24px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    font-weight: 600;
-    transition: all .3s;
-  }
+.about-left-part .el-tabs__active-bar {
+  width: 0 !important;
+}
 
-  .about-left-part .el-tabs__item.is-active::after {
-    content: " ";
-    display: inline-block;
-    position: absolute;
-    right: -20px;
-    width: 27px;
-    height: 27px;
-    border: 6px solid #8DA8F1;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    background-color: #fff;
-    -webkit-transform: scale(.5);
-    -moz-transform: scale(.5);
-    -ms-transform: scale(.5);
-    transform: scale(.5);
-  }
+.about-left-part .el-tabs {
+  text-align: right;
+}
 
-  .about-left-part .el-tabs__nav-wrap::after {
-    background: rgba(0, 0, 0, 0);
-  }
+.about-item .websites a {
+  color: #8da8f1;
+}
 
-  .about-left-part .el-tabs__active-bar {
-    width: 0 !important;
-  }
+.about-item .websites {
+  margin-left: 20px;
+}
 
-  .about-left-part .el-tabs {
-    text-align: right;
-  }
+.about-left-part .el-tabs--left .el-tabs__header.is-left {
+  float: none;
+}
 
-  .about-item .websites a {
-    color: #8DA8F1;
-  }
+.about-left-part {
+  /*1140 - 300 == > 840px*/
+  padding-top: 80px;
+  width: 320px;
+  min-height: 300px;
+  position: fixed;
+}
 
-  .about-item .websites {
-    margin-left: 20px;
-  }
+.about-item {
+  background: #fff;
+  padding: 16px;
+  box-shadow: 2px 2px 2px #000000;
+}
 
-  .about-left-part .el-tabs--left .el-tabs__header.is-left {
-    float: none;
-  }
+.about-right-part .about-item {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  line-height: 30px;
+  font-size: 16px;
+}
 
-  .about-left-part {
-    /*1140 - 300 == > 840px*/
-    padding-top: 20px;
-    width: 320px;
-    min-height: 300px;
-  }
+.about-right-part .about-img {
+  margin-bottom: 60px;
+}
 
-  .about-item {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 2px 2px 2px #000000;
-  }
+.about-right-part .about-img img {
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px #000;
+}
 
+.about-right-part h1 {
+  margin-bottom: 20px;
+}
 
-  .about-right-part .about-item {
-    margin-top: 5px;
-    margin-bottom: 50px;
-    line-height: 30px;
-    font-size: 16px;
-  }
-
-  .about-right-part .about-img {
-    margin-bottom: 100px;
-  }
-
-  .about-right-part .about-img img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px #000;
-  }
-
-  .about-right-part h1 {
-    margin-bottom: 20px;
-  }
-
-  .about-right-part {
-    /*background: #e8f3ff;*/
-    padding: 20px 110px 20px 20px;
-    width: 710px;
-    margin-left: 300px;
-  }
-
-
+.about-right-part {
+  /*background: #e8f3ff;*/
+  padding: 20px 20px 20px 20px;
+  width: 710px;
+  margin-left: 300px;
+  display: absolute;
+}
 </style>
