@@ -1,8 +1,8 @@
 import http from './http';
 
 // const baseUrl = 'http://172.30.50.4:8081';
-const baseUrl = 'http://152.136.183.34:8081';
-// const baseUrl = 'http://10.0.16.16:8081';
+// const baseUrl = 'http://152.136.183.34:8081';
+const baseUrl = 'http://10.0.16.16:8081';
 
 export const success_code = 20000;
 
