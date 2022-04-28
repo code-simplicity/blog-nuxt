@@ -1,12 +1,21 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview"
-  },
-  "devDependencies": {
-    "nuxt": "3.0.0-rc.1"
-  }
+	"name": "blog-nuxt",
+	"private": true,
+	"version": "1.0.0",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview"
+	},
+	"devDependencies": {
+		"nuxt": "3.0.0-rc.1"
+	},
+	"author": {
+		"name": "bugdr",
+		"email": "468264345@qq.com",
+		"url": "https://www.bugdr.cn"
+	},
+	"license": "MIT",
+	"homepage": "https://www.bugdr.cn"
 }
