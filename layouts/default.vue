@@ -7,9 +7,15 @@
  * @Description: 主页面模块
 -->
 <template>
-	<div></div>
+    <div></div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
+const asyncDate = (value) => {
+    if (value) {
+        let naxt = '';
+        naxt = value;
+    }
+};
 </script>
 <style lang="scss" scoped></style>

@@ -18,5 +18,15 @@ module.exports = {
         "vue",
         "@typescript-eslint"
     ],
-    "rules": {}
+    "rules": {
+        "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+        "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+        "prettier/prettier": [
+            "error",
+            {
+                endOfLine: "auto",
+            },
+        ],
+        "vue/html-self-closing": "error",
+    }
 }
